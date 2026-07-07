@@ -93,6 +93,9 @@ input:checked + .slider::before{transform:translateX(24px);background:var(--gold
 .compose-broadcast{background:rgba(0,0,0,.2);border:1px solid var(--gold-dim);border-radius:6px;padding:16px;margin-bottom:20px}
 .compose-broadcast h3{font-family:'Bungee',cursive;color:var(--gold-light);font-size:.95rem;margin-bottom:10px}
 .compose-broadcast textarea{width:100%;min-height:70px;background:rgba(0,0,0,.3);border:1px solid var(--gold-dim);border-radius:6px;color:var(--cream);padding:10px;font-family:'Poppins',sans-serif;font-size:1rem;margin-bottom:10px;resize:vertical}
+.game-cfg-row{display:flex;gap:14px;flex-wrap:wrap}
+.game-cfg-row label{flex:1;min-width:140px;display:flex;flex-direction:column;gap:6px;font-family:'Space Mono',monospace;font-size:.7rem;color:var(--gold-dim);text-transform:uppercase}
+.game-cfg-row input{background:rgba(0,0,0,.3);border:1px solid var(--gold-dim);border-radius:6px;padding:10px;color:var(--cream);font-family:'Space Mono',monospace;font-size:1rem}
 
 .inbox-item{background:rgba(0,0,0,.2);border:1px solid rgba(212,175,55,.2);border-radius:6px;padding:12px 14px;margin-bottom:10px;cursor:pointer}
 .inbox-item.unread{border-color:var(--gold);background:rgba(212,175,55,.08)}
@@ -121,6 +124,7 @@ input:checked + .slider::before{transform:translateX(24px);background:var(--gold
 
   <nav class="tabbar">
     <button class="tab-btn active" data-view="clients">Clients</button>
+    <button class="tab-btn" data-view="jeux">Jeux</button>
     <button class="tab-btn" data-view="messagerie">Messagerie</button>
     <button class="tab-btn" data-view="reglages">Réglages</button>
   </nav>
@@ -141,6 +145,43 @@ input:checked + .slider::before{transform:translateX(24px);background:var(--gold
         <thead><tr><th style="width:34px"></th><th>Pseudo</th><th>Client</th><th>Téléphone</th><th>Points</th></tr></thead>
         <tbody id="clientsBody"></tbody>
       </table>
+    </section>
+
+    <section class="view" id="view-jeux">
+      <div class="compose-broadcast">
+        <h3>🎰 Machine à sous</h3>
+        <div class="sub" style="margin-bottom:10px">Pourcentage de chance de gagner, et points remportés à chaque victoire.</div>
+        <div class="game-cfg-row">
+          <label>Chance de gagner (%)<input type="number" id="cfgSlotWin" min="0" max="100" value="20"></label>
+          <label>Points gagnés<input type="number" id="cfgSlotPoints" min="0" value="20"></label>
+        </div>
+      </div>
+      <div class="compose-broadcast">
+        <h3>🃏 Blackjack</h3>
+        <div class="sub" style="margin-bottom:10px">Pourcentage de chance de gagner, et points remportés à chaque victoire.</div>
+        <div class="game-cfg-row">
+          <label>Chance de gagner (%)<input type="number" id="cfgBjWin" min="0" max="100" value="30"></label>
+          <label>Points gagnés<input type="number" id="cfgBjPoints" min="0" value="25"></label>
+        </div>
+      </div>
+      <div class="compose-broadcast">
+        <h3>🎡 Roulette</h3>
+        <div class="sub" style="margin-bottom:10px">Pourcentage de chance de gagner, et points remportés à chaque victoire.</div>
+        <div class="game-cfg-row">
+          <label>Chance de gagner (%)<input type="number" id="cfgRouletteWin" min="0" max="100" value="25"></label>
+          <label>Points gagnés<input type="number" id="cfgRoulettePoints" min="0" value="20"></label>
+        </div>
+      </div>
+      <div class="compose-broadcast">
+        <h3>🪙 Pousse-pièces</h3>
+        <div class="sub" style="margin-bottom:10px">Pourcentage de chance de gagner, et points remportés à chaque victoire.</div>
+        <div class="game-cfg-row">
+          <label>Chance de gagner (%)<input type="number" id="cfgPousseWin" min="0" max="100" value="15"></label>
+          <label>Points gagnés<input type="number" id="cfgPoussePoints" min="0" value="30"></label>
+        </div>
+      </div>
+      <button class="btn-gold" id="saveGamesConfigBtn" style="width:100%">Enregistrer les réglages des jeux</button>
+      <div id="gamesConfigSaved" style="color:var(--gold-light);font-size:.85rem;margin-top:8px;min-height:16px;text-align:center"></div>
     </section>
 
     <section class="view" id="view-messagerie">
@@ -194,6 +235,11 @@ input:checked + .slider::before{transform:translateX(24px);background:var(--gold
       <input type="number" id="cpAmount" placeholder="Montant" value="10">
       <button class="btn-gold" id="cpAdd">+ Ajouter</button>
       <button class="btn-gold minus" id="cpSub">− Retirer</button>
+    </div>
+
+    <div class="pts-adjust">
+      <input type="number" id="cpSetAmount" placeholder="Nouveau total">
+      <button class="btn-outline" id="cpSetBtn" style="flex:1">Définir ce total</button>
     </div>
 
     <div style="margin-top:6px">
@@ -332,6 +378,30 @@ function initData(){
     await setDoc(generalRef, { standName: name }, { merge:true });
     const savedEl = document.getElementById('standNameSaved');
     savedEl.textContent = 'Enregistré ✓';
+    setTimeout(() => savedEl.textContent = '', 2000);
+  });
+
+  const gamesConfigRef = doc(db,'config','games');
+  onSnapshot(gamesConfigRef, (snap) => {
+    const g = snap.exists() ? snap.data() : {};
+    document.getElementById('cfgSlotWin').value = g.slot?.winPercent ?? 20;
+    document.getElementById('cfgSlotPoints').value = g.slot?.points ?? 20;
+    document.getElementById('cfgBjWin').value = g.blackjack?.winPercent ?? 30;
+    document.getElementById('cfgBjPoints').value = g.blackjack?.points ?? 25;
+    document.getElementById('cfgRouletteWin').value = g.roulette?.winPercent ?? 25;
+    document.getElementById('cfgRoulettePoints').value = g.roulette?.points ?? 20;
+    document.getElementById('cfgPousseWin').value = g.pousse?.winPercent ?? 15;
+    document.getElementById('cfgPoussePoints').value = g.pousse?.points ?? 30;
+  });
+  document.getElementById('saveGamesConfigBtn').addEventListener('click', async () => {
+    await setDoc(gamesConfigRef, {
+      slot: { winPercent: parseInt(document.getElementById('cfgSlotWin').value,10)||0, points: parseInt(document.getElementById('cfgSlotPoints').value,10)||0 },
+      blackjack: { winPercent: parseInt(document.getElementById('cfgBjWin').value,10)||0, points: parseInt(document.getElementById('cfgBjPoints').value,10)||0 },
+      roulette: { winPercent: parseInt(document.getElementById('cfgRouletteWin').value,10)||0, points: parseInt(document.getElementById('cfgRoulettePoints').value,10)||0 },
+      pousse: { winPercent: parseInt(document.getElementById('cfgPousseWin').value,10)||0, points: parseInt(document.getElementById('cfgPoussePoints').value,10)||0 }
+    }, { merge:true });
+    const savedEl = document.getElementById('gamesConfigSaved');
+    savedEl.textContent = 'Réglages enregistrés ✓';
     setTimeout(() => savedEl.textContent = '', 2000);
   });
 }
@@ -515,6 +585,20 @@ async function adjustPoints(delta){
 }
 document.getElementById('cpAdd').addEventListener('click', () => adjustPoints(1));
 document.getElementById('cpSub').addEventListener('click', () => adjustPoints(-1));
+
+document.getElementById('cpSetBtn').addEventListener('click', async () => {
+  const newTotal = parseInt(document.getElementById('cpSetAmount').value,10);
+  if (!currentClientId || isNaN(newTotal) || newTotal < 0) return;
+  const c = clients.find(x => x.id===currentClientId);
+  const oldPoints = c.points||0;
+  const delta = newTotal - oldPoints;
+  const updates = { points: newTotal, lastActivity: serverTimestamp() };
+  if (delta > 0) updates.lifetimePoints = (c.lifetimePoints||0) + delta;
+  await updateDoc(doc(db,'clients',currentClientId), updates);
+  await logHistory(currentClientId, `Solde défini par l'équipe`, delta);
+  document.getElementById('cpPoints').textContent = newTotal;
+  document.getElementById('cpSetAmount').value = '';
+});
 
 document.getElementById('cpGiftBtn').addEventListener('click', async () => {
   if (!currentClientId) return;

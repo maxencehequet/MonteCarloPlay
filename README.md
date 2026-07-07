@@ -102,7 +102,14 @@ Sans cette configuration, le bouton d'envoi d'email affichera un message d'avert
 
 ## Les mini-jeux
 
-La machine à sous, le blackjack et la roulette sont **juste des jeux pour le plaisir** : ils n'attribuent aucun point. Les points restent uniquement gérés par l'équipe du stand depuis l'onglet **Clients** de l'admin (ajout/retrait manuel), pour que l'appli reste un vrai programme de fidélité.
+Machine à sous, blackjack, roulette et **pousse-pièces** (nouveau) font maintenant gagner de vrais points, selon des **pourcentages de gain que tu règles toi-même** dans l'admin, onglet **Jeux** :
+- Pour chaque jeu : la chance de gagner (%) et le nombre de points remportés à chaque victoire
+- Le jeu reste visuellement aléatoire (les cartes, la roue, les rouleaux tournent normalement), mais le résultat final (gagné/perdu) est déterminé par le pourcentage que tu as configuré — tu gardes un contrôle total sur l'économie de points
+- Chaque victoire est enregistrée dans l'historique du client
+
+## Définir directement le solde de points d'un client
+
+Dans l'admin, onglet Clients → ouvrir une fiche : en plus d'ajouter/retirer des points, un champ **"Nouveau total"** permet de fixer directement le solde exact d'un client (utile pour corriger une erreur ou synchroniser avec un système externe).
 
 ## Personnaliser le nom du stand
 
