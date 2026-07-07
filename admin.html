@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="Content-Security-Policy" content="default-src * 'unsafe-inline' 'unsafe-eval' data: blob:;">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="theme-color" content="#0A2E22">
+<title>Casino Royal · Administration</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700;900&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --felt-dark:#0A2E22;--felt-mid:#0F4A36;
+  --gold:#D4AF37;--gold-light:#F0D584;--gold-dim:#8A7326;
+  --burgundy:#6E1423;--cream:#F3E9D2;--ink:#0C0C0C;
+}
+html,body{min-height:100%;background:var(--felt-dark);color:var(--cream);font-family:'Cormorant Garamond',serif}
+body{min-height:100vh;background:linear-gradient(160deg, var(--felt-mid) 0%, var(--felt-dark) 60%, #071f17 100%)}
+
+/* Login */
+.login-screen{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px}
+.login-box{width:100%;max-width:360px;background:linear-gradient(180deg, rgba(15,74,54,.6), rgba(10,46,34,.8));border:1px solid var(--gold-dim);border-radius:8px;padding:32px;text-align:center}
+.login-box h1{font-family:'Cinzel',serif;color:var(--gold-light);font-size:1.4rem;margin-bottom:20px;letter-spacing:.05em}
+.login-box input{width:100%;background:rgba(0,0,0,.3);border:1px solid var(--gold-dim);border-radius:4px;padding:12px;color:var(--cream);font-size:1.1rem;margin-bottom:14px;text-align:center}
+.login-box button{width:100%;background:linear-gradient(180deg,var(--gold-light),var(--gold));color:var(--ink);border:none;border-radius:4px;padding:12px;font-family:'Cinzel',serif;font-weight:700;cursor:pointer;text-transform:uppercase;letter-spacing:.05em}
+.login-err{color:#e8748a;font-size:.85rem;margin-top:10px;min-height:18px}
+
+/* App shell */
+#app{display:none}
+header{position:sticky;top:0;z-index:20;background:rgba(7,31,23,.95);border-bottom:1px solid var(--gold-dim);padding:14px 20px;display:flex;justify-content:space-between;align-items:center}
+.logo{font-family:'Cinzel',serif;font-weight:700;color:var(--gold-light);letter-spacing:.05em}
+.logout{background:none;border:1px solid var(--gold-dim);color:var(--gold-dim);border-radius:4px;padding:6px 12px;font-size:.8rem;cursor:pointer;font-family:'DM Mono',monospace}
+
+.tabbar{display:flex;gap:4px;padding:16px 20px 0;max-width:960px;margin:0 auto}
+.tab-btn{background:none;border:none;border-bottom:2px solid transparent;color:rgba(243,233,210,.55);font-family:'Cinzel',serif;font-size:.85rem;padding:10px 16px;cursor:pointer;text-transform:uppercase;letter-spacing:.05em}
+.tab-btn.active{color:var(--gold-light);border-bottom-color:var(--gold)}
+
+main{max-width:960px;margin:0 auto;padding:20px}
+.view{display:none}
+.view.active{display:block}
+
+.search-bar{width:100%;background:rgba(0,0,0,.25);border:1px solid var(--gold-dim);border-radius:6px;padding:12px 14px;color:var(--cream);font-size:1.05rem;margin-bottom:16px}
+
+.client-table{width:100%;border-collapse:collapse}
+.client-table th{text-align:left;font-family:'DM Mono',monospace;font-size:.68rem;text-transform:uppercase;letter-spacing:.08em;color:var(--gold-dim);padding:8px 10px;border-bottom:1px solid var(--gold-dim)}
+.client-table td{padding:10px;border-bottom:1px solid rgba(212,175,55,.1);font-size:.98rem;cursor:pointer}
+.client-table tr:hover td{background:rgba(212,175,55,.06)}
+.pts-badge{font-family:'DM Mono',monospace;color:var(--gold-light);font-weight:600}
+
+.panel-overlay{position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:100;display:none;align-items:center;justify-content:center;padding:16px}
+.panel-overlay.active{display:flex}
+.panel{width:100%;max-width:440px;background:linear-gradient(180deg,var(--felt-mid),var(--felt-dark));border:1px solid var(--gold);border-radius:8px;padding:24px;position:relative;max-height:90vh;overflow-y:auto}
+.panel-close{position:absolute;top:12px;right:14px;background:none;border:none;color:var(--gold-dim);font-size:1.4rem;cursor:pointer}
+.panel h2{font-family:'Cinzel',serif;color:var(--gold-light);margin-bottom:14px;font-size:1.2rem}
+.panel .row{display:flex;justify-content:space-between;padding:6px 0;font-size:.98rem;border-bottom:1px solid rgba(212,175,55,.1)}
+.panel .row span:first-child{color:rgba(243,233,210,.6);font-family:'DM Mono',monospace;font-size:.72rem;text-transform:uppercase}
+
+.pts-adjust{display:flex;gap:8px;margin:16px 0;align-items:center}
+.pts-adjust input{width:90px;background:rgba(0,0,0,.3);border:1px solid var(--gold-dim);border-radius:4px;padding:9px;color:var(--cream);text-align:center;font-family:'DM Mono',monospace}
+.btn-gold{background:linear-gradient(180deg,var(--gold-light),var(--gold));color:var(--ink);border:none;border-radius:4px;padding:9px 16px;font-family:'Cinzel',serif;font-weight:700;font-size:.82rem;cursor:pointer;text-transform:uppercase}
+.btn-gold.minus{background:linear-gradient(180deg,#c98a8a,var(--burgundy))}
+.btn-outline{background:none;border:1px solid var(--gold-dim);color:var(--gold-light);border-radius:4px;padding:9px 16px;font-family:'Cinzel',serif;font-size:.8rem;cursor:pointer}
+
+textarea.reply-box{width:100%;min-height:60px;background:rgba(0,0,0,.25);border:1px solid var(--gold-dim);border-radius:6px;color:var(--cream);padding:10px;font-family:'Cormorant Garamond',serif;font-size:1rem;margin-top:10px;resize:vertical}
+
+/* Messagerie */
+.toggle-row{display:flex;align-items:center;justify-content:space-between;background:rgba(0,0,0,.2);border:1px solid var(--gold-dim);border-radius:6px;padding:14px 18px;margin-bottom:20px}
+.toggle-row .lbl{font-family:'Cinzel',serif;font-size:.95rem;color:var(--gold-light)}
+.toggle-row .sub{font-size:.85rem;color:rgba(243,233,210,.6)}
+.switch{position:relative;width:50px;height:26px;flex-shrink:0}
+.switch input{opacity:0;width:0;height:0}
+.slider{position:absolute;cursor:pointer;inset:0;background:rgba(0,0,0,.4);border:1px solid var(--gold-dim);border-radius:26px;transition:.2s}
+.slider::before{content:'';position:absolute;height:18px;width:18px;left:3px;top:3px;background:var(--gold-dim);border-radius:50%;transition:.2s}
+input:checked + .slider{background:rgba(212,175,55,.25);border-color:var(--gold)}
+input:checked + .slider::before{transform:translateX(24px);background:var(--gold-light)}
+
+.compose-broadcast{background:rgba(0,0,0,.2);border:1px solid var(--gold-dim);border-radius:6px;padding:16px;margin-bottom:20px}
+.compose-broadcast h3{font-family:'Cinzel',serif;color:var(--gold-light);font-size:.95rem;margin-bottom:10px}
+.compose-broadcast textarea{width:100%;min-height:70px;background:rgba(0,0,0,.3);border:1px solid var(--gold-dim);border-radius:6px;color:var(--cream);padding:10px;font-family:'Cormorant Garamond',serif;font-size:1rem;margin-bottom:10px;resize:vertical}
+
+.inbox-item{background:rgba(0,0,0,.2);border:1px solid rgba(212,175,55,.2);border-radius:6px;padding:12px 14px;margin-bottom:10px;cursor:pointer}
+.inbox-item.unread{border-color:var(--gold);background:rgba(212,175,55,.08)}
+.inbox-item .who{font-family:'Cinzel',serif;font-size:.9rem;color:var(--gold-light)}
+.inbox-item .time{font-family:'DM Mono',monospace;font-size:.65rem;color:var(--gold-dim);float:right}
+.inbox-item .text{margin-top:6px;font-size:.98rem}
+.empty-note{text-align:center;color:rgba(243,233,210,.5);font-style:italic;padding:30px 10px}
+</style>
+</head>
+<body>
+
+<div class="login-screen" id="loginScreen">
+  <div class="login-box">
+    <h1>CASINO ROYAL · ADMIN</h1>
+    <input type="password" id="pwdInput" placeholder="Mot de passe">
+    <button id="loginBtn">Entrer</button>
+    <div class="login-err" id="loginErr"></div>
+  </div>
+</div>
+
+<div id="app">
+  <header>
+    <div class="logo">CASINO ROYAL · ADMIN</div>
+    <button class="logout" id="logoutBtn">Déconnexion</button>
+  </header>
+
+  <nav class="tabbar">
+    <button class="tab-btn active" data-view="clients">Clients</button>
+    <button class="tab-btn" data-view="messagerie">Messagerie</button>
+    <button class="tab-btn" data-view="reglages">Réglages</button>
+  </nav>
+
+  <main>
+    <section class="view active" id="view-clients">
+      <input type="text" class="search-bar" id="searchInput" placeholder="Rechercher un client (nom, téléphone, email)...">
+      <table class="client-table">
+        <thead><tr><th>Client</th><th>Téléphone</th><th>Points</th></tr></thead>
+        <tbody id="clientsBody"></tbody>
+      </table>
+    </section>
+
+    <section class="view" id="view-messagerie">
+      <div class="toggle-row">
+        <div>
+          <div class="lbl">Autoriser les clients à écrire</div>
+          <div class="sub">Si désactivé, les clients ne peuvent plus envoyer de message.</div>
+        </div>
+        <label class="switch">
+          <input type="checkbox" id="msgToggle">
+          <span class="slider"></span>
+        </label>
+      </div>
+
+      <div class="compose-broadcast">
+        <h3>Envoyer un message à tous les clients</h3>
+        <textarea id="broadcastInput" placeholder="Ex: Nouvelle tombola ce week-end, tentez votre chance !"></textarea>
+        <button class="btn-gold" id="broadcastBtn">Diffuser à tous</button>
+      </div>
+
+      <h3 style="font-family:'Cinzel',serif;color:var(--gold-light);margin-bottom:10px">Messages reçus des clients</h3>
+      <div id="inboxList"></div>
+    </section>
+
+    <section class="view" id="view-reglages">
+      <div class="compose-broadcast">
+        <h3>Nom du stand</h3>
+        <div class="sub" style="margin-bottom:10px">Ce nom s'affiche en haut de la page d'inscription et de l'espace client.</div>
+        <input type="text" class="search-bar" id="standNameInput" placeholder="Ex: Casino Royal" style="margin-bottom:10px">
+        <button class="btn-gold" id="saveStandNameBtn">Enregistrer</button>
+        <div id="standNameSaved" style="color:var(--gold-light);font-size:.85rem;margin-top:8px;min-height:16px"></div>
+      </div>
+    </section>
+  </main>
+</div>
+
+<!-- Panneau détail client -->
+<div class="panel-overlay" id="clientPanel">
+  <div class="panel">
+    <button class="panel-close" data-close>✕</button>
+    <h2 id="cpName">—</h2>
+    <div class="row"><span>Téléphone</span><span id="cpTel">—</span></div>
+    <div class="row"><span>Email</span><span id="cpEmail">—</span></div>
+    <div class="row"><span>Points actuels</span><span class="pts-badge" id="cpPoints">0</span></div>
+    <div class="row"><span>Membre depuis</span><span id="cpSince">—</span></div>
+
+    <div class="pts-adjust">
+      <input type="number" id="cpAmount" placeholder="Montant" value="10">
+      <button class="btn-gold" id="cpAdd">+ Ajouter</button>
+      <button class="btn-gold minus" id="cpSub">− Retirer</button>
+    </div>
+
+    <textarea class="reply-box" id="cpMsgInput" placeholder="Envoyer un message à ce client..."></textarea>
+    <div style="margin-top:8px;text-align:right">
+      <button class="btn-outline" id="cpSendMsg">Envoyer le message</button>
+    </div>
+  </div>
+</div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import {
+  getFirestore, collection, doc, getDocs, onSnapshot, updateDoc, setDoc,
+  addDoc, query, orderBy, serverTimestamp
+} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+/* ⚠️ Même configuration Firebase que register.html / client.html */
+const firebaseConfig = {
+  apiKey: "REPLACE_ME",
+  authDomain: "REPLACE_ME.firebaseapp.com",
+  projectId: "REPLACE_ME",
+  storageBucket: "REPLACE_ME.firebasestorage.app",
+  messagingSenderId: "REPLACE_ME",
+  appId: "REPLACE_ME"
+};
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+/* ⚠️ Mot de passe admin — À CHANGER avant la mise en service */
+const ADMIN_PWD = "casinoroyal2024";
+
+// ── Login ──
+const loginScreen = document.getElementById('loginScreen');
+const appEl = document.getElementById('app');
+function showApp(){ loginScreen.style.display='none'; appEl.style.display='block'; initData(); }
+if (sessionStorage.getItem('casinoAdminAuth') === '1') showApp();
+
+document.getElementById('loginBtn').addEventListener('click', () => {
+  const v = document.getElementById('pwdInput').value;
+  if (v === ADMIN_PWD) {
+    sessionStorage.setItem('casinoAdminAuth','1');
+    showApp();
+  } else {
+    document.getElementById('loginErr').textContent = 'Mot de passe incorrect.';
+  }
+});
+document.getElementById('pwdInput').addEventListener('keydown', (e) => { if (e.key==='Enter') document.getElementById('loginBtn').click(); });
+document.getElementById('logoutBtn').addEventListener('click', () => {
+  sessionStorage.removeItem('casinoAdminAuth');
+  window.location.reload();
+});
+
+// ── Tabs ──
+document.querySelectorAll('.tab-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+    document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById('view-'+btn.dataset.view).classList.add('active');
+  });
+});
+
+let clients = [];
+let currentClientId = null;
+
+function initData(){
+  onSnapshot(collection(db,'clients'), (snap) => {
+    clients = snap.docs.map(d => ({ id:d.id, ...d.data() }));
+    renderClients();
+  });
+
+  const configRef = doc(db,'config','messaging');
+  onSnapshot(configRef, (snap) => {
+    const enabled = snap.exists() ? (snap.data().clientMessagesEnabled !== false) : true;
+    document.getElementById('msgToggle').checked = enabled;
+  });
+  document.getElementById('msgToggle').addEventListener('change', async (e) => {
+    await setDoc(configRef, { clientMessagesEnabled: e.target.checked }, { merge:true });
+  });
+
+  onSnapshot(query(collection(db,'messages'), orderBy('createdAt','desc')), (snap) => {
+    const inbox = snap.docs.map(d => ({ id:d.id, ...d.data() })).filter(m => m.from === 'client');
+    renderInbox(inbox);
+  });
+
+  const generalRef = doc(db,'config','general');
+  onSnapshot(generalRef, (snap) => {
+    const name = snap.exists() ? (snap.data().standName || '') : '';
+    document.getElementById('standNameInput').value = name;
+  });
+  document.getElementById('saveStandNameBtn').addEventListener('click', async () => {
+    const name = document.getElementById('standNameInput').value.trim();
+    if (!name) return;
+    await setDoc(generalRef, { standName: name }, { merge:true });
+    const savedEl = document.getElementById('standNameSaved');
+    savedEl.textContent = 'Enregistré ✓';
+    setTimeout(() => savedEl.textContent = '', 2000);
+  });
+}
+
+function renderClients(filter=''){
+  const tbody = document.getElementById('clientsBody');
+  const f = filter.trim().toLowerCase();
+  const filtered = clients.filter(c => {
+    if (!f) return true;
+    return (c.prenom||'').toLowerCase().includes(f) ||
+           (c.nom||'').toLowerCase().includes(f) ||
+           (c.telephone||'').includes(f) ||
+           (c.email||'').toLowerCase().includes(f);
+  }).sort((a,b) => (b.points||0)-(a.points||0));
+
+  tbody.innerHTML = filtered.map(c => `
+    <tr data-id="${c.id}">
+      <td>${escapeHtml(c.prenom||'')} ${escapeHtml(c.nom||'')}</td>
+      <td>${escapeHtml(c.telephone||'')}</td>
+      <td class="pts-badge">${c.points||0}</td>
+    </tr>
+  `).join('') || '<tr><td colspan="3" style="text-align:center;color:rgba(243,233,210,.5)">Aucun client</td></tr>';
+
+  tbody.querySelectorAll('tr[data-id]').forEach(tr => {
+    tr.addEventListener('click', () => openClientPanel(tr.dataset.id));
+  });
+}
+document.getElementById('searchInput').addEventListener('input', (e) => renderClients(e.target.value));
+
+function escapeHtml(s){ return (s||'').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+
+function openClientPanel(id){
+  const c = clients.find(x => x.id===id);
+  if (!c) return;
+  currentClientId = id;
+  document.getElementById('cpName').textContent = `${c.prenom||''} ${c.nom||''}`;
+  document.getElementById('cpTel').textContent = c.telephone||'—';
+  document.getElementById('cpEmail').textContent = c.email||'—';
+  document.getElementById('cpPoints').textContent = c.points||0;
+  document.getElementById('cpSince').textContent = c.createdAt?.toDate ? c.createdAt.toDate().toLocaleDateString('fr-FR') : '—';
+  document.getElementById('cpMsgInput').value = '';
+  document.getElementById('clientPanel').classList.add('active');
+}
+document.querySelectorAll('[data-close]').forEach(b => b.addEventListener('click', () => {
+  document.getElementById('clientPanel').classList.remove('active');
+}));
+
+async function adjustPoints(delta){
+  const amount = parseInt(document.getElementById('cpAmount').value,10) || 0;
+  if (!currentClientId || amount <= 0) return;
+  const c = clients.find(x => x.id===currentClientId);
+  const newPoints = Math.max(0, (c.points||0) + delta*amount);
+  await updateDoc(doc(db,'clients',currentClientId), { points: newPoints, lastActivity: serverTimestamp() });
+  document.getElementById('cpPoints').textContent = newPoints;
+}
+document.getElementById('cpAdd').addEventListener('click', () => adjustPoints(1));
+document.getElementById('cpSub').addEventListener('click', () => adjustPoints(-1));
+
+document.getElementById('cpSendMsg').addEventListener('click', async () => {
+  const text = document.getElementById('cpMsgInput').value.trim();
+  if (!text || !currentClientId) return;
+  await addDoc(collection(db,'messages'), {
+    toClientId: currentClientId, from: 'admin', text,
+    broadcast: false, read: true,
+    createdAt: serverTimestamp()
+  });
+  document.getElementById('cpMsgInput').value = '';
+});
+
+document.getElementById('broadcastBtn').addEventListener('click', async () => {
+  const input = document.getElementById('broadcastInput');
+  const text = input.value.trim();
+  if (!text) return;
+  await addDoc(collection(db,'messages'), {
+    from: 'admin', text, broadcast: true, read: true,
+    createdAt: serverTimestamp()
+  });
+  input.value = '';
+});
+
+function renderInbox(inbox){
+  const list = document.getElementById('inboxList');
+  if (inbox.length === 0) {
+    list.innerHTML = '<div class="empty-note">Aucun message client pour le moment.</div>';
+    return;
+  }
+  list.innerHTML = inbox.map(m => {
+    const c = clients.find(x => x.id === m.clientId);
+    const name = c ? `${c.prenom||''} ${c.nom||''}` : (m.prenom ? `${m.prenom} ${m.nom||''}` : 'Client');
+    const time = m.createdAt?.toDate ? m.createdAt.toDate().toLocaleString('fr-FR',{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'}) : '';
+    return `
+      <div class="inbox-item ${m.read?'':'unread'}" data-id="${m.id}" data-client="${m.clientId||''}">
+        <span class="time">${time}</span>
+        <div class="who">${escapeHtml(name)}</div>
+        <div class="text">${escapeHtml(m.text)}</div>
+      </div>`;
+  }).join('');
+
+  list.querySelectorAll('.inbox-item').forEach(item => {
+    item.addEventListener('click', async () => {
+      const msgId = item.dataset.id;
+      const clientId = item.dataset.client;
+      if (item.classList.contains('unread')) {
+        await updateDoc(doc(db,'messages',msgId), { read: true });
+      }
+      if (clientId) openClientPanel(clientId);
+    });
+  });
+}
+</script>
+</body>
+</html>

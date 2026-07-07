@@ -1,0 +1,33 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Clients — lecture publique, écriture libre (pas d'auth, comme sur le reste du système)
+    match /clients/{clientId} {
+      allow read: if true;
+      allow write: if true;
+    }
+
+    // Messages admin <-> client
+    match /messages/{messageId} {
+      allow read: if true;
+      allow create: if true;
+      allow update: if true;
+      allow delete: if true;
+    }
+
+    // Config générale (ex: activation messagerie client)
+    match /config/{id} {
+      allow read: if true;
+      allow write: if true;
+    }
+
+    // Logs de jeux (anti-doublon, historique gains)
+    match /gamelogs/{id} {
+      allow read: if true;
+      allow create: if true;
+      allow update: if false;
+      allow delete: if false;
+    }
+  }
+}
