@@ -37,7 +37,6 @@ body{
     linear-gradient(160deg, var(--near-black) 0%, var(--black) 70%);
 }
 
-/* ── Jetons de poker décoratifs ── */
 .chip{position:fixed;pointer-events:none;z-index:0;filter:drop-shadow(0 8px 18px rgba(0,0,0,.5));animation:chip-float 7s ease-in-out infinite}
 @keyframes chip-float{0%,100%{transform:translateY(0) rotate(0deg)}50%{transform:translateY(-14px) rotate(8deg)}}
 .chip.c1{top:6%;left:4%;width:64px;height:64px;animation-delay:0s}
@@ -47,7 +46,6 @@ body{
 .chip.c5{top:44%;left:1%;width:38px;height:38px;animation-delay:-3.4s;opacity:.7}
 .chip.c6{top:52%;right:1.5%;width:40px;height:40px;animation-delay:-5.2s;opacity:.7}
 
-/* ── Cartes à jouer décoratives ── */
 .deco-card{position:fixed;pointer-events:none;z-index:0;width:56px;height:78px;background:var(--cream);border-radius:6px;
   box-shadow:0 10px 22px rgba(0,0,0,.5);display:flex;align-items:center;justify-content:center;font-family:'Poppins',sans-serif;font-weight:700;font-size:1.5rem}
 .deco-card.red{color:var(--red)}
@@ -69,14 +67,11 @@ body{
   background:linear-gradient(180deg, var(--near-black), var(--black));
   border:1px solid rgba(255,203,60,.35);
   border-radius:11px;
-  padding:34px 30px 28px;
+  padding:30px 30px 28px;
   position:relative;
 }
 
-/* Badge machine à sous */
-.slot-badge{
-  display:flex;justify-content:center;gap:6px;margin-bottom:14px;
-}
+.slot-badge{display:flex;justify-content:center;gap:6px;margin-bottom:14px}
 .slot-badge .reel-mini{
   width:38px;height:38px;background:#0a0a0a;border:2px solid var(--gold);border-radius:6px;
   display:flex;align-items:center;justify-content:center;font-size:1.3rem;
@@ -86,20 +81,25 @@ body{
 .brand{text-align:center;margin-bottom:8px}
 .brand .eyebrow{font-family:'Space Mono',monospace;font-size:.68rem;letter-spacing:.3em;color:var(--gold-light);text-transform:uppercase;opacity:.85}
 .brand h1{
-  font-family:'Bungee',cursive;font-weight:400;font-size:2.15rem;letter-spacing:.02em;line-height:1.15;
-  color:var(--gold);
-  -webkit-text-stroke:1px rgba(140,16,36,.6);
+  font-family:'Bungee',cursive;font-weight:400;font-size:2.05rem;letter-spacing:.02em;line-height:1.15;
+  color:var(--gold);-webkit-text-stroke:1px rgba(140,16,36,.6);
   text-shadow:0 0 18px rgba(255,203,60,.4), 3px 3px 0 var(--red-deep);
   margin:6px 0 12px;
 }
-.suits-divider{text-align:center;letter-spacing:.5em;font-size:1.1rem;margin-bottom:18px}
+.suits-divider{text-align:center;letter-spacing:.5em;font-size:1.1rem;margin-bottom:16px}
 .suits-divider span{display:inline-block;margin:0 2px}
 .suits-divider .r{color:var(--red)}
 .suits-divider .b{color:var(--cream)}
 
-.tagline{text-align:center;font-weight:500;color:var(--gold-light);font-size:1.02rem;margin-bottom:26px;opacity:.9}
+/* Toggle Inscription / Connexion */
+.mode-toggle{display:flex;background:rgba(0,0,0,.3);border:1px solid var(--gold-dim,rgba(255,203,60,.3));border-radius:10px;padding:4px;margin-bottom:22px}
+.mode-btn{flex:1;text-align:center;background:none;border:none;padding:10px 6px;font-family:'Bungee',cursive;font-size:.72rem;letter-spacing:.03em;color:rgba(255,246,232,.55);border-radius:7px;cursor:pointer;text-transform:uppercase;transition:.2s}
+.mode-btn.active{background:linear-gradient(180deg,var(--gold-light),var(--gold));color:var(--ink);box-shadow:0 4px 14px rgba(255,203,60,.3)}
+
+.tagline{text-align:center;font-weight:500;color:var(--gold-light);font-size:.98rem;margin-bottom:22px;opacity:.9}
 
 form{display:flex;flex-direction:column;gap:16px}
+form.hidden{display:none}
 .field{display:flex;flex-direction:column;gap:6px}
 .field label{font-family:'Space Mono',monospace;font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;color:var(--gold);opacity:.9}
 .field input{
@@ -109,13 +109,14 @@ form{display:flex;flex-direction:column;gap:16px}
 }
 .field input::placeholder{color:rgba(255,246,232,.35);font-weight:400}
 .field input:focus{outline:none;border-color:var(--gold);background:rgba(255,203,60,.08);box-shadow:0 0 0 4px rgba(255,203,60,.15)}
+.field input.pin-input{letter-spacing:.6em;font-family:'Space Mono',monospace;font-size:1.3rem;text-align:center}
 .row2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
 
 .btn-join{
-  margin-top:8px;position:relative;
+  margin-top:6px;position:relative;
   background:linear-gradient(180deg,var(--gold-light) 0%,var(--gold) 45%,var(--gold-deep) 100%);
   color:var(--ink);font-family:'Bungee',cursive;font-weight:400;letter-spacing:.03em;
-  border:none;border-radius:10px;padding:16px;font-size:1.05rem;cursor:pointer;
+  border:none;border-radius:10px;padding:16px;font-size:1.02rem;cursor:pointer;
   text-transform:uppercase;box-shadow:0 10px 26px rgba(255,203,60,.3), inset 0 -3px 0 rgba(0,0,0,.15);
   transition:transform .15s, box-shadow .15s;
 }
@@ -127,11 +128,11 @@ form{display:flex;flex-direction:column;gap:16px}
 .msg.error{color:var(--red-glow)}
 .msg.ok{color:var(--gold)}
 
-.footer-note{text-align:center;margin-top:22px;font-size:.78rem;color:rgba(255,246,232,.45);font-family:'Poppins',sans-serif;letter-spacing:.01em}
+.footer-note{text-align:center;margin-top:20px;font-size:.78rem;color:rgba(255,246,232,.45);font-family:'Poppins',sans-serif}
 
 @media (max-width:420px){
   .row2{grid-template-columns:1fr}
-  .brand h1{font-size:1.7rem}
+  .brand h1{font-size:1.6rem}
   .chip.c1,.chip.c2,.chip.c3,.chip.c4{display:none}
   .deco-card{display:none}
 }
@@ -139,14 +140,12 @@ form{display:flex;flex-direction:column;gap:16px}
 </head>
 <body>
 
-<!-- Jetons de poker décoratifs (SVG) -->
 <svg class="chip c1" viewBox="0 0 64 64"><circle cx="32" cy="32" r="30" fill="#8C1024" stroke="#FFCB3C" stroke-width="2"/><circle cx="32" cy="32" r="30" fill="none" stroke="#FFF6E8" stroke-width="4" stroke-dasharray="6 8"/><circle cx="32" cy="32" r="19" fill="#D42A3C" stroke="#FFCB3C" stroke-width="2"/><text x="32" y="39" text-anchor="middle" font-family="Bungee, cursive" font-size="16" fill="#FFE8A3">7</text></svg>
 <svg class="chip c2" viewBox="0 0 64 64"><circle cx="32" cy="32" r="30" fill="#0A5236" stroke="#FFCB3C" stroke-width="2"/><circle cx="32" cy="32" r="30" fill="none" stroke="#FFF6E8" stroke-width="4" stroke-dasharray="6 8"/><circle cx="32" cy="32" r="19" fill="#0E7A4E" stroke="#FFCB3C" stroke-width="2"/><text x="32" y="39" text-anchor="middle" font-family="Bungee, cursive" font-size="20" fill="#FFE8A3">♣</text></svg>
 <svg class="chip c3" viewBox="0 0 64 64"><circle cx="32" cy="32" r="30" fill="#1C0D14" stroke="#FFCB3C" stroke-width="2"/><circle cx="32" cy="32" r="30" fill="none" stroke="#FFF6E8" stroke-width="4" stroke-dasharray="6 8"/><circle cx="32" cy="32" r="19" fill="#3B1245" stroke="#FFCB3C" stroke-width="2"/><text x="32" y="39" text-anchor="middle" font-family="Bungee, cursive" font-size="20" fill="#FFE8A3">♠</text></svg>
 <svg class="chip c4" viewBox="0 0 64 64"><circle cx="32" cy="32" r="30" fill="#8C1024" stroke="#FFCB3C" stroke-width="2"/><circle cx="32" cy="32" r="30" fill="none" stroke="#FFF6E8" stroke-width="4" stroke-dasharray="6 8"/><circle cx="32" cy="32" r="19" fill="#D42A3C" stroke="#FFCB3C" stroke-width="2"/><text x="32" y="39" text-anchor="middle" font-family="Bungee, cursive" font-size="20" fill="#FFE8A3">♥</text></svg>
 <svg class="chip c5" viewBox="0 0 64 64"><circle cx="32" cy="32" r="30" fill="#0A5236" stroke="#FFCB3C" stroke-width="2"/><circle cx="32" cy="32" r="19" fill="#0E7A4E"/></svg>
 <svg class="chip c6" viewBox="0 0 64 64"><circle cx="32" cy="32" r="30" fill="#1C0D14" stroke="#FFCB3C" stroke-width="2"/><circle cx="32" cy="32" r="19" fill="#3B1245"/></svg>
-
 <div class="deco-card a1 red">A♥</div>
 <div class="deco-card a2 black">K♠</div>
 
@@ -162,12 +161,23 @@ form{display:flex;flex-direction:column;gap:16px}
 
       <div class="brand">
         <div class="eyebrow">Programme de fidélité</div>
-        <h1>CASINO ROYAL</h1>
+        <h1 id="brandTitle">CASINO ROYAL</h1>
       </div>
       <div class="suits-divider"><span class="r">♠</span><span class="r">♥</span><span class="b">♦</span><span class="b">♣</span></div>
-      <p class="tagline">La chance sourit à ceux qui reviennent</p>
 
+      <div class="mode-toggle">
+        <button type="button" class="mode-btn active" id="btnModeRegister">S'inscrire</button>
+        <button type="button" class="mode-btn" id="btnModeLogin">Se connecter</button>
+      </div>
+
+      <p class="tagline" id="tagline">La chance sourit à ceux qui reviennent</p>
+
+      <!-- FORMULAIRE INSCRIPTION -->
       <form id="registerForm">
+        <div class="field">
+          <label for="pseudo">Pseudo</label>
+          <input id="pseudo" type="text" placeholder="MaxLeChanceux" required maxlength="24" autocomplete="username">
+        </div>
         <div class="row2">
           <div class="field">
             <label for="prenom">Prénom</label>
@@ -186,8 +196,32 @@ form{display:flex;flex-direction:column;gap:16px}
           <label for="email">Adresse email</label>
           <input id="email" type="email" placeholder="jean.dupont@email.com" required autocomplete="email">
         </div>
-        <button type="submit" class="btn-join" id="submitBtn">Rejoindre la table</button>
-        <div class="msg" id="formMsg"></div>
+        <div class="row2">
+          <div class="field">
+            <label for="pinCreate">Code à 4 chiffres</label>
+            <input id="pinCreate" class="pin-input" type="password" inputmode="numeric" pattern="[0-9]*" maxlength="4" placeholder="••••" required autocomplete="new-password">
+          </div>
+          <div class="field">
+            <label for="pinConfirm">Confirmer le code</label>
+            <input id="pinConfirm" class="pin-input" type="password" inputmode="numeric" pattern="[0-9]*" maxlength="4" placeholder="••••" required autocomplete="new-password">
+          </div>
+        </div>
+        <button type="submit" class="btn-join" id="submitBtnRegister">Rejoindre la table</button>
+        <div class="msg" id="formMsgRegister"></div>
+      </form>
+
+      <!-- FORMULAIRE CONNEXION -->
+      <form id="loginForm" class="hidden">
+        <div class="field">
+          <label for="loginPseudo">Pseudo</label>
+          <input id="loginPseudo" type="text" placeholder="MaxLeChanceux" required maxlength="24" autocomplete="username">
+        </div>
+        <div class="field">
+          <label for="loginPin">Code à 4 chiffres</label>
+          <input id="loginPin" class="pin-input" type="password" inputmode="numeric" pattern="[0-9]*" maxlength="4" placeholder="••••" required autocomplete="current-password">
+        </div>
+        <button type="submit" class="btn-join" id="submitBtnLogin">Se connecter</button>
+        <div class="msg" id="formMsgLogin"></div>
       </form>
 
       <div class="footer-note">Vos données servent uniquement au programme de fidélité du stand.</div>
@@ -199,15 +233,7 @@ form{display:flex;flex-direction:column;gap:16px}
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
 import { getFirestore, collection, doc, setDoc, getDoc, getDocs, query, where, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
-/* ============================================================
-   ⚠️ CONFIGURATION FIREBASE — À REMPLACER PAR LE PROJET DU CLIENT
-   1. Créer un projet sur https://console.firebase.google.com
-   2. Ajouter une application Web
-   3. Copier la config ci-dessous (identique dans register.html,
-      client.html et admin.html)
-   4. Activer Firestore (mode production) et coller le contenu
-      de firestore.rules dans l'onglet Règles
-   ============================================================ */
+/* ⚠️ Même configuration Firebase que client.html / admin.html */
 const firebaseConfig = {
   apiKey: "AIzaSyDpQTC-a2uaiMCkwnfCKzDWJJ4PqZJ7pts",
   authDomain: "montecarlo-play.firebaseapp.com",
@@ -216,7 +242,6 @@ const firebaseConfig = {
   messagingSenderId: "704314582373",
   appId: "1:704314582373:web:6518d788c7abb7972ead8c"
 };
-
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
@@ -224,74 +249,155 @@ const db = getFirestore(app);
 getDoc(doc(db,'config','general')).then(snap => {
   if (snap.exists() && snap.data().standName) {
     const name = snap.data().standName;
-    document.querySelector('.brand h1').textContent = name;
+    document.getElementById('brandTitle').textContent = name;
     document.title = name + ' · Rejoindre la table';
   }
 }).catch(() => {});
 
-const form = document.getElementById('registerForm');
-const msgEl = document.getElementById('formMsg');
-const btn = document.getElementById('submitBtn');
-
-function normalizeTel(t){ return t.replace(/[\s.\-]/g,''); }
-
-function withTimeout(promise, ms){
-  return Promise.race([
-    promise,
-    new Promise((_, reject) => setTimeout(() => reject(new Error('TIMEOUT')), ms))
-  ]);
+// ── Hash du code PIN (SHA-256, salé avec le pseudo) ──
+async function hashPin(pseudoLower, pin){
+  const enc = new TextEncoder().encode(pseudoLower + ':' + pin + ':casino-royal-salt-v1');
+  const buf = await crypto.subtle.digest('SHA-256', enc);
+  return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2,'0')).join('');
 }
+function normalizeTel(t){ return t.replace(/[\s.\-]/g,''); }
+function normalizePseudo(p){ return p.trim().toLowerCase(); }
 
-form.addEventListener('submit', async (e) => {
+// ── Bascule Inscription / Connexion ──
+const btnModeRegister = document.getElementById('btnModeRegister');
+const btnModeLogin = document.getElementById('btnModeLogin');
+const registerForm = document.getElementById('registerForm');
+const loginForm = document.getElementById('loginForm');
+const tagline = document.getElementById('tagline');
+
+btnModeRegister.addEventListener('click', () => {
+  btnModeRegister.classList.add('active'); btnModeLogin.classList.remove('active');
+  registerForm.classList.remove('hidden'); loginForm.classList.add('hidden');
+  tagline.textContent = 'La chance sourit à ceux qui reviennent';
+});
+btnModeLogin.addEventListener('click', () => {
+  btnModeLogin.classList.add('active'); btnModeRegister.classList.remove('active');
+  loginForm.classList.remove('hidden'); registerForm.classList.add('hidden');
+  tagline.textContent = 'Content de te revoir à la table';
+});
+
+// ── Inscription ──
+const msgReg = document.getElementById('formMsgRegister');
+const btnReg = document.getElementById('submitBtnRegister');
+
+registerForm.addEventListener('submit', async (e) => {
   e.preventDefault();
-  msgEl.textContent = '';
-  msgEl.className = 'msg';
-  btn.disabled = true;
-  btn.textContent = 'Enregistrement...';
+  msgReg.textContent = ''; msgReg.className = 'msg';
+  btnReg.disabled = true; btnReg.textContent = 'Enregistrement...';
 
+  const pseudo = document.getElementById('pseudo').value.trim();
+  const pseudoLower = normalizePseudo(pseudo);
   const prenom = document.getElementById('prenom').value.trim();
   const nom = document.getElementById('nom').value.trim();
   const tel = normalizeTel(document.getElementById('tel').value.trim());
   const email = document.getElementById('email').value.trim().toLowerCase();
+  const pin = document.getElementById('pinCreate').value.trim();
+  const pinConfirm = document.getElementById('pinConfirm').value.trim();
+
+  if (!/^[0-9]{4}$/.test(pin)) {
+    msgReg.textContent = 'Le code doit contenir exactement 4 chiffres.';
+    msgReg.className = 'msg error'; btnReg.disabled = false; btnReg.textContent = 'Rejoindre la table';
+    return;
+  }
+  if (pin !== pinConfirm) {
+    msgReg.textContent = 'Les deux codes ne correspondent pas.';
+    msgReg.className = 'msg error'; btnReg.disabled = false; btnReg.textContent = 'Rejoindre la table';
+    return;
+  }
 
   try {
-    const q = query(collection(db, 'clients'), where('telephone', '==', tel));
-    const existing = await withTimeout(getDocs(q), 10000);
-
-    if (!existing.empty) {
-      const clientId = existing.docs[0].id;
-      localStorage.setItem('casinoClientId', clientId);
-      msgEl.textContent = 'Fiche existante retrouvée, redirection...';
-      msgEl.className = 'msg ok';
-      setTimeout(() => window.location.href = `client.html?id=${clientId}`, 700);
+    const pseudoQ = query(collection(db, 'clients'), where('pseudoLower', '==', pseudoLower));
+    const pseudoExisting = await getDocs(pseudoQ);
+    if (!pseudoExisting.empty) {
+      msgReg.textContent = 'Ce pseudo est déjà pris — connecte-toi plutôt.';
+      msgReg.className = 'msg error'; btnReg.disabled = false; btnReg.textContent = 'Rejoindre la table';
       return;
     }
 
+    const telQ = query(collection(db, 'clients'), where('telephone', '==', tel));
+    const telExisting = await getDocs(telQ);
+    if (!telExisting.empty) {
+      msgReg.textContent = 'Ce numéro est déjà associé à un compte — connecte-toi plutôt.';
+      msgReg.className = 'msg error'; btnReg.disabled = false; btnReg.textContent = 'Rejoindre la table';
+      return;
+    }
+
+    const pinHash = await hashPin(pseudoLower, pin);
     const newDocRef = doc(collection(db, 'clients'));
-    await withTimeout(setDoc(newDocRef, {
-      prenom, nom, telephone: tel, email,
-      points: 0,
+    await setDoc(newDocRef, {
+      pseudo, pseudoLower, prenom, nom, telephone: tel, email, pinHash,
+      points: 0, lifetimePoints: 0,
+      gamesPlayedCount: 0, giftsReceivedCount: 0, jackpotWon: false,
+      loginStreak: { count: 1, lastDate: new Date().toISOString().slice(0,10) },
+      badges: [],
       createdAt: serverTimestamp(),
       lastActivity: serverTimestamp()
-    }), 10000);
+    });
 
     localStorage.setItem('casinoClientId', newDocRef.id);
-    msgEl.textContent = 'Bienvenue à la table !';
-    msgEl.className = 'msg ok';
+    msgReg.textContent = 'Bienvenue à la table !';
+    msgReg.className = 'msg ok';
     setTimeout(() => window.location.href = `client.html?id=${newDocRef.id}`, 700);
 
   } catch (err) {
     console.error(err);
     let detail = err && err.message ? err.message : 'inconnue';
-    if (detail === 'TIMEOUT') detail = "délai dépassé — vérifiez votre connexion internet ou qu'une extension (antivirus/bloqueur) ne bloque pas Google/Firebase.";
-    else if (detail.includes('permission')) detail = "permissions refusées — vérifiez que les règles Firestore ont bien été publiées.";
-    msgEl.textContent = "Erreur : " + detail;
-    msgEl.className = 'msg error';
-    btn.disabled = false;
-    btn.textContent = 'Rejoindre la table';
+    if (detail.includes('permission')) detail = "permissions refusées — vérifiez les règles Firestore.";
+    msgReg.textContent = "Erreur : " + detail;
+    msgReg.className = 'msg error';
+    btnReg.disabled = false; btnReg.textContent = 'Rejoindre la table';
   }
 });
 
+// ── Connexion ──
+const msgLogin = document.getElementById('formMsgLogin');
+const btnLogin = document.getElementById('submitBtnLogin');
+
+loginForm.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  msgLogin.textContent = ''; msgLogin.className = 'msg';
+  btnLogin.disabled = true; btnLogin.textContent = 'Connexion...';
+
+  const pseudoLower = normalizePseudo(document.getElementById('loginPseudo').value);
+  const pin = document.getElementById('loginPin').value.trim();
+
+  try {
+    const q = query(collection(db, 'clients'), where('pseudoLower', '==', pseudoLower));
+    const res = await getDocs(q);
+    if (res.empty) {
+      msgLogin.textContent = 'Pseudo introuvable — inscris-toi plutôt.';
+      msgLogin.className = 'msg error'; btnLogin.disabled = false; btnLogin.textContent = 'Se connecter';
+      return;
+    }
+    const clientDoc = res.docs[0];
+    const data = clientDoc.data();
+    const pinHash = await hashPin(pseudoLower, pin);
+
+    if (pinHash !== data.pinHash) {
+      msgLogin.textContent = 'Code incorrect.';
+      msgLogin.className = 'msg error'; btnLogin.disabled = false; btnLogin.textContent = 'Se connecter';
+      return;
+    }
+
+    localStorage.setItem('casinoClientId', clientDoc.id);
+    msgLogin.textContent = 'Connexion réussie !';
+    msgLogin.className = 'msg ok';
+    setTimeout(() => window.location.href = `client.html?id=${clientDoc.id}`, 500);
+
+  } catch (err) {
+    console.error(err);
+    msgLogin.textContent = "Erreur : " + (err.message || 'inconnue');
+    msgLogin.className = 'msg error';
+    btnLogin.disabled = false; btnLogin.textContent = 'Se connecter';
+  }
+});
+
+// Auto-redirect si déjà connecté sur cet appareil
 const savedId = localStorage.getItem('casinoClientId');
 if (savedId) {
   const p = new URLSearchParams(window.location.search);

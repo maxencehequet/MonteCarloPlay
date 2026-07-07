@@ -13,6 +13,7 @@
 <link rel="apple-touch-icon" href="./icon-192.png">
 <title>Casino Royal · Mon espace</title>
 <link href="https://fonts.googleapis.com/css2?family=Bungee&family=Poppins:wght@400;500;600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
@@ -30,7 +31,6 @@ body{
 }
 a{color:inherit}
 
-/* Header */
 header{
   position:sticky;top:0;z-index:20;
   background:linear-gradient(180deg, rgba(7,31,23,.97), rgba(7,31,23,.9));
@@ -38,7 +38,7 @@ header{
   padding:14px 18px;display:flex;align-items:center;justify-content:space-between;
   backdrop-filter:blur(6px);
 }
-.logo{font-family:'Bungee',cursive;font-weight:700;font-size:1.15rem;letter-spacing:.05em;
+.logo{font-family:'Bungee',cursive;font-weight:700;font-size:1.1rem;letter-spacing:.03em;
   background:linear-gradient(180deg,var(--gold-light),var(--gold));-webkit-background-clip:text;background-clip:text;color:transparent}
 .chips{
   display:flex;align-items:center;gap:8px;background:rgba(0,0,0,.3);border:1px solid var(--gold-dim);
@@ -47,18 +47,58 @@ header{
 .chip-icon{width:20px;height:20px;border-radius:50%;background:radial-gradient(circle at 35% 30%, var(--gold-light), var(--gold) 60%, var(--gold-dim));
   border:2px solid rgba(0,0,0,.3);display:inline-block}
 
-/* Tabs */
-.tabbar{display:flex;justify-content:center;gap:4px;padding:16px 12px 0;max-width:640px;margin:0 auto}
+.tabbar{display:flex;justify-content:center;gap:2px;padding:14px 8px 0;max-width:640px;margin:0 auto;overflow-x:auto}
 .tab-btn{
-  flex:1;text-align:center;background:none;border:1px solid transparent;border-bottom:2px solid transparent;
-  color:rgba(243,233,210,.55);font-family:'Bungee',cursive;font-size:.78rem;letter-spacing:.06em;
-  padding:10px 6px;cursor:pointer;text-transform:uppercase;transition:color .2s, border-color .2s;
+  flex:1;min-width:70px;text-align:center;background:none;border:1px solid transparent;border-bottom:2px solid transparent;
+  color:rgba(243,233,210,.55);font-family:'Bungee',cursive;font-size:.62rem;letter-spacing:.02em;
+  padding:10px 4px;cursor:pointer;text-transform:uppercase;transition:color .2s, border-color .2s;white-space:nowrap;
 }
 .tab-btn.active{color:var(--gold-light);border-bottom-color:var(--gold)}
 
 main{max-width:640px;margin:0 auto;padding:20px 16px}
 .view{display:none}
 .view.active{display:block}
+
+/* ── Carte fidélité ── */
+.loyalty-card{
+  border-radius:16px;padding:26px 22px;position:relative;overflow:hidden;margin-bottom:18px;
+  background:linear-gradient(135deg, var(--card-color1,#3B1245), var(--card-color2,#1C0D14) 60%);
+  border:1.5px solid var(--gold);box-shadow:0 16px 40px rgba(0,0,0,.5), inset 0 0 40px rgba(255,203,60,.08);
+}
+.loyalty-card::before{content:'';position:absolute;top:-40%;right:-20%;width:220px;height:220px;border-radius:50%;
+  background:radial-gradient(circle, rgba(255,203,60,.18), transparent 70%);pointer-events:none}
+.card-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:18px}
+.card-pseudo{font-family:'Bungee',cursive;font-size:1.25rem;color:var(--gold-light);line-height:1.2}
+.card-level{display:flex;align-items:center;gap:6px;font-family:'Space Mono',monospace;font-size:.72rem;color:var(--cream);opacity:.85;margin-top:4px;text-transform:uppercase;letter-spacing:.05em}
+.card-level .lvl-icon{font-size:1rem}
+.qr-wrap{background:var(--cream);border-radius:10px;padding:8px;display:inline-block;box-shadow:0 6px 16px rgba(0,0,0,.4)}
+.card-bottom{display:flex;justify-content:space-between;align-items:flex-end;margin-top:8px}
+.card-points .num{font-family:'Bungee',cursive;font-size:2rem;color:var(--gold-light);line-height:1}
+.card-points .lbl{font-family:'Space Mono',monospace;font-size:.62rem;letter-spacing:.15em;color:rgba(255,246,232,.6);text-transform:uppercase}
+.card-since{font-family:'Space Mono',monospace;font-size:.68rem;color:rgba(255,246,232,.5);text-align:right}
+
+.section-title{font-family:'Bungee',cursive;font-size:.85rem;color:var(--gold-light);margin:22px 0 12px;letter-spacing:.02em}
+
+.badges-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:8px}
+.badge{aspect-ratio:1;border-radius:10px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;
+  background:rgba(0,0,0,.2);border:1px solid rgba(255,203,60,.15);font-size:1.3rem;opacity:.35;filter:grayscale(1);padding:4px;text-align:center}
+.badge.earned{opacity:1;filter:none;background:rgba(255,203,60,.1);border-color:var(--gold)}
+.badge .badge-label{font-size:.5rem;font-family:'Space Mono',monospace;color:rgba(255,246,232,.7);line-height:1.1}
+
+.info-card{background:rgba(0,0,0,.2);border:1px solid var(--gold-dim);border-radius:10px;padding:16px 18px;margin-top:18px}
+.info-row{display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px solid rgba(212,175,55,.1);font-size:.95rem}
+.info-row:last-child{border-bottom:none}
+.info-row span:first-child{color:rgba(243,233,210,.55);font-family:'Space Mono',monospace;font-size:.68rem;text-transform:uppercase}
+.btn-logout{width:100%;margin-top:16px;background:none;border:1px solid var(--burgundy-light);color:var(--burgundy-light);border-radius:8px;padding:12px;font-family:'Bungee',cursive;font-size:.75rem;cursor:pointer;text-transform:uppercase}
+
+/* Historique */
+.history-item{display:flex;justify-content:space-between;align-items:center;background:rgba(0,0,0,.2);border:1px solid rgba(212,175,55,.15);border-radius:8px;padding:12px 14px;margin-bottom:8px}
+.history-item .h-label{font-size:.95rem}
+.history-item .h-time{font-family:'Space Mono',monospace;font-size:.65rem;color:rgba(243,233,210,.5);margin-top:2px}
+.history-item .h-delta{font-family:'Space Mono',monospace;font-weight:700;font-size:1rem}
+.history-item .h-delta.pos{color:var(--gold-light)}
+.history-item .h-delta.neg{color:var(--burgundy-light)}
+.empty-note{text-align:center;color:rgba(243,233,210,.5);font-style:italic;padding:30px 10px}
 
 /* Game cards */
 .games-grid{display:grid;grid-template-columns:1fr;gap:16px}
@@ -70,15 +110,13 @@ main{max-width:640px;margin:0 auto;padding:20px 16px}
 .game-card::after{content:'';position:absolute;inset:0;border:1px solid rgba(212,175,55,.15);border-radius:8px;margin:3px;pointer-events:none}
 .game-icon{font-size:2.4rem;filter:drop-shadow(0 2px 6px rgba(0,0,0,.4))}
 .game-info{flex:1}
-.game-info h3{font-family:'Bungee',cursive;font-size:1.1rem;color:var(--gold-light);margin-bottom:2px}
-.game-info p{font-size:.95rem;color:rgba(243,233,210,.7)}
-.game-plays{font-family:'Space Mono',monospace;font-size:.72rem;color:var(--gold-dim);margin-top:6px}
+.game-info h3{font-family:'Bungee',cursive;font-size:.95rem;color:var(--gold-light);margin-bottom:2px}
+.game-info p{font-size:.92rem;color:rgba(243,233,210,.7)}
 .btn-play{
   background:linear-gradient(180deg,var(--gold-light),var(--gold) 55%,var(--gold-dim));
   color:var(--ink);border:none;border-radius:4px;padding:10px 18px;font-family:'Bungee',cursive;
-  font-weight:700;font-size:.8rem;letter-spacing:.04em;cursor:pointer;text-transform:uppercase;white-space:nowrap;
+  font-size:.72rem;letter-spacing:.02em;cursor:pointer;text-transform:uppercase;white-space:nowrap;
 }
-.btn-play:disabled{opacity:.4;cursor:not-allowed}
 
 /* Modal */
 .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:100;display:none;align-items:center;justify-content:center;padding:16px}
@@ -87,10 +125,9 @@ main{max-width:640px;margin:0 auto;padding:20px 16px}
   width:100%;max-width:420px;background:linear-gradient(180deg,var(--felt-mid),var(--felt-dark));
   border:1px solid var(--gold);border-radius:8px;padding:24px;position:relative;max-height:90vh;overflow-y:auto;
 }
-.modal h2{font-family:'Bungee',cursive;color:var(--gold-light);text-align:center;font-size:1.3rem;margin-bottom:16px}
+.modal h2{font-family:'Bungee',cursive;color:var(--gold-light);text-align:center;font-size:1.1rem;margin-bottom:16px}
 .modal-close{position:absolute;top:12px;right:14px;background:none;border:none;color:var(--gold-dim);font-size:1.4rem;cursor:pointer;line-height:1}
 
-/* Slot machine */
 .slot-reels{display:flex;justify-content:center;gap:10px;margin:20px 0}
 .reel{
   width:76px;height:76px;background:#0c0c0c;border:2px solid var(--gold);border-radius:6px;
@@ -100,30 +137,28 @@ main{max-width:640px;margin:0 auto;padding:20px 16px}
 .reel.spin{animation:reel-spin .12s linear infinite}
 @keyframes reel-spin{0%{transform:translateY(0)}100%{transform:translateY(-8px)}}
 
-/* Blackjack */
 .bj-table{text-align:center;margin:10px 0}
 .bj-hand-label{font-family:'Space Mono',monospace;font-size:.75rem;color:var(--gold-dim);letter-spacing:.1em;text-transform:uppercase;margin:14px 0 6px}
 .bj-cards{display:flex;gap:6px;justify-content:center;flex-wrap:wrap;min-height:70px}
 .card{
   width:46px;height:64px;background:var(--cream);border-radius:5px;display:flex;align-items:center;justify-content:center;
-  font-family:'Bungee',cursive;font-weight:700;font-size:1.1rem;box-shadow:0 3px 8px rgba(0,0,0,.4);
+  font-family:'Poppins',sans-serif;font-weight:700;font-size:1.1rem;box-shadow:0 3px 8px rgba(0,0,0,.4);
 }
 .card.red{color:var(--burgundy)}
 .card.black{color:#111}
 .card.hidden{background:repeating-linear-gradient(45deg,var(--burgundy),var(--burgundy) 4px,#5a0f1c 4px,#5a0f1c 8px);color:transparent;border:1px solid var(--gold-dim)}
 .bj-total{font-family:'Space Mono',monospace;font-size:.85rem;color:var(--cream);margin-top:4px}
 .bj-actions{display:flex;gap:10px;justify-content:center;margin-top:18px}
-.btn-bj{flex:1;max-width:130px;background:linear-gradient(180deg,var(--gold-light),var(--gold));color:var(--ink);border:none;border-radius:4px;padding:11px;font-family:'Bungee',cursive;font-weight:700;font-size:.85rem;cursor:pointer;text-transform:uppercase}
+.btn-bj{flex:1;max-width:130px;background:linear-gradient(180deg,var(--gold-light),var(--gold));color:var(--ink);border:none;border-radius:4px;padding:11px;font-family:'Bungee',cursive;font-size:.72rem;cursor:pointer;text-transform:uppercase}
 .btn-bj:disabled{opacity:.35;cursor:not-allowed}
 .btn-bj.secondary{background:transparent;border:1px solid var(--gold-dim);color:var(--gold-light)}
 
-/* Roulette */
 .roulette-wrap{display:flex;justify-content:center;margin:16px 0}
 .wheel-svg{transition:transform 3.5s cubic-bezier(.15,.85,.25,1)}
 .bet-options{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin:14px 0}
 .bet-btn{
   border:1px solid var(--gold-dim);background:rgba(0,0,0,.25);color:var(--cream);border-radius:4px;
-  padding:8px 14px;font-family:'Bungee',cursive;font-size:.78rem;cursor:pointer;text-transform:uppercase;
+  padding:8px 14px;font-family:'Bungee',cursive;font-size:.68rem;cursor:pointer;text-transform:uppercase;
 }
 .bet-btn.selected{border-color:var(--gold);background:rgba(212,175,55,.2);color:var(--gold-light)}
 .bet-btn.red{color:var(--red-pocket)}
@@ -131,9 +166,9 @@ main{max-width:640px;margin:0 auto;padding:20px 16px}
 .number-bet{display:flex;gap:8px;justify-content:center;align-items:center;margin:10px 0}
 .number-bet input{width:70px;background:rgba(0,0,0,.3);border:1px solid var(--gold-dim);color:var(--cream);border-radius:4px;padding:8px;text-align:center;font-family:'Space Mono',monospace}
 
-.result-banner{text-align:center;font-family:'Bungee',cursive;font-size:1.1rem;margin-top:16px;min-height:28px}
+.result-banner{text-align:center;font-family:'Bungee',cursive;font-size:1rem;margin-top:16px;min-height:28px}
 .result-banner.win{color:var(--gold-light)}
-.result-banner.lose{color:#e8748a}
+.result-banner.lose{color:var(--burgundy-light)}
 .result-banner.push{color:rgba(243,233,210,.7)}
 
 /* Messages */
@@ -145,16 +180,7 @@ main{max-width:640px;margin:0 auto;padding:20px 16px}
 .bubble .meta{display:block;font-family:'Space Mono',monospace;font-size:.62rem;color:var(--gold-dim);margin-top:4px}
 .msg-compose{display:flex;gap:8px;margin-top:10px}
 .msg-compose textarea{flex:1;resize:none;background:rgba(0,0,0,.25);border:1px solid var(--gold-dim);border-radius:6px;color:var(--cream);padding:10px;font-family:'Poppins',sans-serif;font-size:1rem;min-height:46px}
-.btn-send{background:var(--gold);color:var(--ink);border:none;border-radius:6px;padding:0 18px;font-family:'Bungee',cursive;font-weight:700;cursor:pointer}
-
-/* Account */
-.account-card{background:linear-gradient(180deg, rgba(15,74,54,.55), rgba(10,46,34,.75));border:1px solid var(--gold-dim);border-radius:8px;padding:24px}
-.account-row{display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid rgba(212,175,55,.12);font-size:1.05rem}
-.account-row:last-child{border-bottom:none}
-.account-row span:first-child{color:rgba(243,233,210,.6);font-family:'Space Mono',monospace;font-size:.75rem;text-transform:uppercase;letter-spacing:.06em}
-.big-points{text-align:center;padding:14px 0 20px}
-.big-points .num{font-family:'Bungee',cursive;font-weight:900;font-size:3rem;color:var(--gold-light);text-shadow:0 4px 18px rgba(212,175,55,.3)}
-.big-points .label{font-family:'Space Mono',monospace;font-size:.7rem;letter-spacing:.2em;color:var(--gold-dim);text-transform:uppercase}
+.btn-send{background:var(--gold);color:var(--ink);border:none;border-radius:6px;padding:0 18px;font-family:'Bungee',cursive;font-size:.75rem;cursor:pointer}
 </style>
 </head>
 <body>
@@ -165,14 +191,43 @@ main{max-width:640px;margin:0 auto;padding:20px 16px}
 </header>
 
 <nav class="tabbar">
-  <button class="tab-btn active" data-view="games">🎰 Jeux</button>
+  <button class="tab-btn active" data-view="carte">🎫 Carte</button>
+  <button class="tab-btn" data-view="games">🎰 Jeux</button>
+  <button class="tab-btn" data-view="historique">📜 Historique</button>
   <button class="tab-btn" data-view="messages">✉️ Messages</button>
-  <button class="tab-btn" data-view="account">👤 Mon compte</button>
 </nav>
 
 <main>
+  <!-- CARTE -->
+  <section class="view active" id="view-carte">
+    <div class="loyalty-card" id="loyaltyCard">
+      <div class="card-top">
+        <div>
+          <div class="card-pseudo" id="cardPseudo">—</div>
+          <div class="card-level"><span class="lvl-icon" id="cardLevelIcon">🎲</span><span id="cardLevelName">Joueur débutant</span></div>
+        </div>
+        <div class="qr-wrap" id="qrcode"></div>
+      </div>
+      <div class="card-bottom">
+        <div class="card-points"><div class="num" id="pointsBig">0</div><div class="lbl">Points fidélité</div></div>
+        <div class="card-since">Membre depuis<br><span id="cardSince">—</span></div>
+      </div>
+    </div>
+
+    <div class="section-title">Succès</div>
+    <div class="badges-grid" id="badgesGrid"></div>
+
+    <div class="info-card">
+      <div class="info-row"><span>Prénom</span><span id="accPrenom">—</span></div>
+      <div class="info-row"><span>Nom</span><span id="accNom">—</span></div>
+      <div class="info-row"><span>Téléphone</span><span id="accTel">—</span></div>
+      <div class="info-row"><span>Email</span><span id="accEmail">—</span></div>
+    </div>
+    <button class="btn-logout" id="logoutBtn">Se déconnecter</button>
+  </section>
+
   <!-- JEUX -->
-  <section class="view active" id="view-games">
+  <section class="view" id="view-games">
     <div class="games-grid">
       <div class="game-card">
         <div class="game-icon">🎰</div>
@@ -201,6 +256,11 @@ main{max-width:640px;margin:0 auto;padding:20px 16px}
     </div>
   </section>
 
+  <!-- HISTORIQUE -->
+  <section class="view" id="view-historique">
+    <div id="historyList"></div>
+  </section>
+
   <!-- MESSAGES -->
   <section class="view" id="view-messages">
     <div id="msgThread" class="msg-thread"></div>
@@ -209,21 +269,6 @@ main{max-width:640px;margin:0 auto;padding:20px 16px}
       <button class="btn-send" id="msgSendBtn">Envoyer</button>
     </div>
     <div id="msgClosedNotice" class="msg-notice" style="display:none">La messagerie est actuellement fermée par l'équipe du stand.</div>
-  </section>
-
-  <!-- COMPTE -->
-  <section class="view" id="view-account">
-    <div class="account-card">
-      <div class="big-points">
-        <div class="num" id="pointsBig">0</div>
-        <div class="label">Points fidélité</div>
-      </div>
-      <div class="account-row"><span>Prénom</span><span id="accPrenom">—</span></div>
-      <div class="account-row"><span>Nom</span><span id="accNom">—</span></div>
-      <div class="account-row"><span>Téléphone</span><span id="accTel">—</span></div>
-      <div class="account-row"><span>Email</span><span id="accEmail">—</span></div>
-      <div class="account-row"><span>Membre depuis</span><span id="accSince">—</span></div>
-    </div>
   </section>
 </main>
 
@@ -297,11 +342,11 @@ main{max-width:640px;margin:0 auto;padding:20px 16px}
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
 import {
-  getFirestore, doc, getDoc, onSnapshot, collection,
-  addDoc, query, where, serverTimestamp
+  getFirestore, doc, getDoc, onSnapshot, collection, updateDoc, addDoc,
+  query, where, orderBy, serverTimestamp, arrayUnion, increment
 } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
-/* ⚠️ Même configuration Firebase que register.html / admin.html — voir instructions dans register.html */
+/* ⚠️ Même configuration Firebase que register.html / admin.html */
 const firebaseConfig = {
   apiKey: "AIzaSyDpQTC-a2uaiMCkwnfCKzDWJJ4PqZJ7pts",
   authDomain: "montecarlo-play.firebaseapp.com",
@@ -315,15 +360,12 @@ const db = getFirestore(app);
 
 const params = new URLSearchParams(window.location.search);
 const clientId = params.get('id') || localStorage.getItem('casinoClientId');
-
-if (!clientId) {
-  window.location.href = 'register.html';
-}
+if (!clientId) { window.location.href = 'register.html'; }
 
 const clientRef = doc(db, 'clients', clientId);
 let clientData = null;
 
-// Nom du stand (modifiable depuis admin.html > Réglages)
+// Nom du stand
 getDoc(doc(db,'config','general')).then(snap => {
   if (snap.exists() && snap.data().standName) {
     const name = snap.data().standName;
@@ -332,19 +374,103 @@ getDoc(doc(db,'config','general')).then(snap => {
   }
 }).catch(() => {});
 
-// ── Charger / écouter la fiche client ──
+// ── Niveaux VIP ──
+const LEVELS = [
+  { min: 0,    name: 'Joueur débutant',    icon: '🎲', c1: '#3B1245', c2: '#1C0D14' },
+  { min: 100,  name: 'Chanceux',           icon: '⭐', c1: '#8C1024', c2: '#1C0D14' },
+  { min: 500,  name: 'High Roller',        icon: '🎰', c1: '#0A5236', c2: '#1C0D14' },
+  { min: 1500, name: 'Diamond',            icon: '💎', c1: '#0E4C7A', c2: '#1C0D14' },
+  { min: 5000, name: 'Roi de Monte-Carlo', icon: '👑', c1: '#7A5A0E', c2: '#3B1245' }
+];
+function getLevel(points){
+  let lvl = LEVELS[0];
+  for (const l of LEVELS) if (points >= l.min) lvl = l;
+  return lvl;
+}
+
+// ── Badges ──
+const BADGE_DEFS = [
+  { id: 'parties100', icon: '🥇', label: '100 parties', check: d => (d.gamesPlayedCount||0) >= 100 },
+  { id: 'cadeaux20',  icon: '🎁', label: '20 cadeaux',  check: d => (d.giftsReceivedCount||0) >= 20 },
+  { id: 'jackpot',    icon: '🎯', label: 'Jackpot',     check: d => d.jackpotWon === true },
+  { id: 'streak30',   icon: '⭐', label: '30 jours',    check: d => (d.loginStreak?.count||0) >= 30 },
+  { id: 'points1000', icon: '🎲', label: '1000 points', check: d => (d.lifetimePoints||0) >= 1000 }
+];
+
+async function checkBadges(data){
+  const earned = data.badges || [];
+  const toAdd = BADGE_DEFS.filter(b => !earned.includes(b.id) && b.check(data)).map(b => b.id);
+  if (toAdd.length > 0) {
+    await updateDoc(clientRef, { badges: arrayUnion(...toAdd) });
+  }
+}
+function renderBadges(data){
+  const grid = document.getElementById('badgesGrid');
+  const earned = data.badges || [];
+  grid.innerHTML = BADGE_DEFS.map(b => `
+    <div class="badge ${earned.includes(b.id) ? 'earned' : ''}" title="${b.label}">
+      <div>${b.icon}</div>
+      <div class="badge-label">${b.label}</div>
+    </div>
+  `).join('');
+}
+
+// ── Streak de connexion (une fois par jour) ──
+function updateLoginStreak(data){
+  const today = new Date().toISOString().slice(0,10);
+  const streak = data.loginStreak || { count: 0, lastDate: null };
+  if (streak.lastDate === today) return null;
+  const yesterday = new Date(Date.now() - 86400000).toISOString().slice(0,10);
+  const newCount = streak.lastDate === yesterday ? (streak.count||0) + 1 : 1;
+  return { count: newCount, lastDate: today };
+}
+
+let qrRendered = false;
+let streakChecked = false;
+
 onSnapshot(clientRef, (snap) => {
   if (!snap.exists()) { window.location.href = 'register.html'; return; }
   clientData = snap.data();
+
   document.getElementById('pointsHeader').textContent = clientData.points ?? 0;
   document.getElementById('pointsBig').textContent = clientData.points ?? 0;
+  document.getElementById('cardPseudo').textContent = clientData.pseudo || `${clientData.prenom||''} ${clientData.nom||''}`;
   document.getElementById('accPrenom').textContent = clientData.prenom || '—';
   document.getElementById('accNom').textContent = clientData.nom || '—';
   document.getElementById('accTel').textContent = clientData.telephone || '—';
   document.getElementById('accEmail').textContent = clientData.email || '—';
   if (clientData.createdAt?.toDate) {
-    document.getElementById('accSince').textContent = clientData.createdAt.toDate().toLocaleDateString('fr-FR');
+    document.getElementById('cardSince').textContent = clientData.createdAt.toDate().toLocaleDateString('fr-FR');
   }
+
+  const lvl = getLevel(clientData.points || 0);
+  document.getElementById('cardLevelIcon').textContent = lvl.icon;
+  document.getElementById('cardLevelName').textContent = lvl.name;
+  const card = document.getElementById('loyaltyCard');
+  card.style.setProperty('--card-color1', lvl.c1);
+  card.style.setProperty('--card-color2', lvl.c2);
+
+  renderBadges(clientData);
+  checkBadges(clientData);
+
+  if (!qrRendered) {
+    qrRendered = true;
+    new QRCode(document.getElementById('qrcode'), {
+      text: clientId, width: 84, height: 84,
+      colorDark: '#0C0C0C', colorLight: '#FFF6E8'
+    });
+  }
+
+  if (!streakChecked) {
+    streakChecked = true;
+    const newStreak = updateLoginStreak(clientData);
+    if (newStreak) updateDoc(clientRef, { loginStreak: newStreak, lastActivity: serverTimestamp() });
+  }
+});
+
+document.getElementById('logoutBtn').addEventListener('click', () => {
+  localStorage.removeItem('casinoClientId');
+  window.location.href = 'register.html';
 });
 
 // ── Tabs ──
@@ -363,6 +489,15 @@ function closeModal(id){ document.getElementById(id).classList.remove('active');
 document.querySelectorAll('[data-close]').forEach(b => b.addEventListener('click', (e) => {
   closeModal(e.target.closest('.modal-overlay').id);
 }));
+
+async function registerGamePlayed(){
+  try { await updateDoc(clientRef, { gamesPlayedCount: increment(1), lastActivity: serverTimestamp() }); }
+  catch (err) { console.error(err); }
+}
+async function registerJackpot(){
+  try { await updateDoc(clientRef, { jackpotWon: true }); }
+  catch (err) { console.error(err); }
+}
 
 /* ================= MACHINE À SOUS (jeu pour le plaisir, sans gain de points) ================= */
 const SLOT_SYMBOLS = ['🍒','🍋','🔔','⭐','💎','7️⃣'];
@@ -383,6 +518,7 @@ document.getElementById('pullLever').addEventListener('click', async () => {
   if (results[0]===results[1] && results[1]===results[2]) {
     msg = results[0]==='7️⃣' ? '🎉 JACKPOT !' : `Triple ${results[0]} !`;
     cls = 'win';
+    if (results[0]==='7️⃣') await registerJackpot();
   } else if (results[0]===results[1] || results[1]===results[2] || results[0]===results[2]) {
     msg = 'Deux symboles identiques !';
     cls = 'win';
@@ -390,6 +526,7 @@ document.getElementById('pullLever').addEventListener('click', async () => {
 
   document.getElementById('slotResult').textContent = msg;
   document.getElementById('slotResult').className = 'result-banner ' + cls;
+  await registerGamePlayed();
   btn.disabled = false; btn.textContent = 'Tirer le levier';
 });
 
@@ -437,7 +574,7 @@ function newBJHand(){
   renderBJ(false);
   if (handTotal(bjState.player) === 21) endBJ('blackjack');
 }
-function endBJ(outcomeHint){
+async function endBJ(outcomeHint){
   const playerTotal = handTotal(bjState.player);
   const dealerTotal = handTotal(bjState.dealer);
   bjState.over = true;
@@ -456,6 +593,7 @@ function endBJ(outcomeHint){
 
   document.getElementById('bjResult').textContent = msg;
   document.getElementById('bjResult').className = 'result-banner ' + cls;
+  await registerGamePlayed();
 }
 document.getElementById('openBlackjack').addEventListener('click', () => {
   openModal('modalBlackjack');
@@ -472,9 +610,7 @@ document.getElementById('bjStand').addEventListener('click', () => {
   while (handTotal(bjState.dealer) < 17) bjState.dealer.push(drawCard());
   endBJ();
 });
-document.getElementById('bjNew').addEventListener('click', () => {
-  newBJHand();
-});
+document.getElementById('bjNew').addEventListener('click', () => { newBJHand(); });
 
 /* ================= ROULETTE (jeu pour le plaisir, sans gain de points) ================= */
 const ROULETTE_ORDER = [0,32,15,19,4,21,2,25,17,34,6,27,13,36,11,30,8,23,10,5,24,16,33,1,20,14,31,9,22,18,29,7,28,12,35,3,26];
@@ -487,7 +623,7 @@ function buildWheelSegments(){
     const a0 = (i/n)*2*Math.PI, a1 = ((i+1)/n)*2*Math.PI;
     const x0 = cx + r*Math.sin(a0), y0 = cy - r*Math.cos(a0);
     const x1 = cx + r*Math.sin(a1), y1 = cy - r*Math.cos(a1);
-    const color = num===0 ? '#146349' : (RED_NUMBERS.has(num) ? '#A6192E' : '#161616');
+    const color = num===0 ? '#0A5236' : (RED_NUMBERS.has(num) ? '#D42A3C' : '#161616');
     const path = document.createElementNS('http://www.w3.org/2000/svg','path');
     path.setAttribute('d', `M${cx},${cy} L${x0},${y0} A${r},${r} 0 0,1 ${x1},${y1} Z`);
     path.setAttribute('fill', color);
@@ -542,8 +678,29 @@ document.getElementById('spinWheel').addEventListener('click', async () => {
 
   resultEl.textContent = msg;
   resultEl.className = 'result-banner ' + cls;
+  await registerGamePlayed();
   btn.disabled = false; btn.textContent = 'Lancer la bille';
   setTimeout(() => { svg.style.transition='none'; svg.style.transform=`rotate(${targetAngle % 360}deg)`; requestAnimationFrame(()=>{ svg.style.transition=''; }); }, 400);
+});
+
+/* ================= HISTORIQUE ================= */
+onSnapshot(query(collection(db, 'clients', clientId, 'history'), orderBy('createdAt','desc')), (snap) => {
+  const list = document.getElementById('historyList');
+  if (snap.empty) {
+    list.innerHTML = '<div class="empty-note">Aucun historique pour le moment.</div>';
+    return;
+  }
+  list.innerHTML = snap.docs.map(d => {
+    const h = d.data();
+    const time = h.createdAt?.toDate ? h.createdAt.toDate().toLocaleString('fr-FR',{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'}) : '';
+    const deltaCls = (h.delta||0) > 0 ? 'pos' : (h.delta||0) < 0 ? 'neg' : '';
+    const deltaText = h.delta ? (h.delta > 0 ? '+' + h.delta : h.delta) : '';
+    return `
+      <div class="history-item">
+        <div><div class="h-label">${escapeHtml(h.label||'')}</div><div class="h-time">${time}</div></div>
+        <div class="h-delta ${deltaCls}">${deltaText}</div>
+      </div>`;
+  }).join('');
 });
 
 /* ================= MESSAGERIE ================= */

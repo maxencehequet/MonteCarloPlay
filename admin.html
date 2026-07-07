@@ -138,7 +138,7 @@ input:checked + .slider::before{transform:translateX(24px);background:var(--gold
       </div>
 
       <table class="client-table">
-        <thead><tr><th style="width:34px"></th><th>Client</th><th>Téléphone</th><th>Points</th></tr></thead>
+        <thead><tr><th style="width:34px"></th><th>Pseudo</th><th>Client</th><th>Téléphone</th><th>Points</th></tr></thead>
         <tbody id="clientsBody"></tbody>
       </table>
     </section>
@@ -182,15 +182,26 @@ input:checked + .slider::before{transform:translateX(24px);background:var(--gold
   <div class="panel">
     <button class="panel-close" data-close>✕</button>
     <h2 id="cpName">—</h2>
+    <div class="row"><span>Pseudo</span><span id="cpPseudo">—</span></div>
+    <div class="row"><span>Niveau</span><span id="cpLevel">—</span></div>
     <div class="row"><span>Téléphone</span><span id="cpTel">—</span></div>
     <div class="row"><span>Email</span><span id="cpEmail">—</span></div>
     <div class="row"><span>Points actuels</span><span class="pts-badge" id="cpPoints">0</span></div>
+    <div class="row"><span>Cadeaux remis</span><span id="cpGifts">0</span></div>
     <div class="row"><span>Membre depuis</span><span id="cpSince">—</span></div>
 
     <div class="pts-adjust">
       <input type="number" id="cpAmount" placeholder="Montant" value="10">
       <button class="btn-gold" id="cpAdd">+ Ajouter</button>
       <button class="btn-gold minus" id="cpSub">− Retirer</button>
+    </div>
+
+    <div style="margin-top:6px">
+      <button class="btn-outline" id="cpGiftBtn" style="width:100%">🎁 Marquer un cadeau remis</button>
+    </div>
+
+    <div style="margin-top:6px">
+      <button class="btn-outline" id="cpResetPinBtn" style="width:100%">🔑 Réinitialiser le code PIN</button>
     </div>
 
     <textarea class="reply-box" id="cpMsgInput" placeholder="Envoyer un message à ce client..."></textarea>
@@ -334,6 +345,7 @@ function renderClients(filter=''){
     if (!f) return true;
     return (c.prenom||'').toLowerCase().includes(f) ||
            (c.nom||'').toLowerCase().includes(f) ||
+           (c.pseudo||'').toLowerCase().includes(f) ||
            (c.telephone||'').includes(f) ||
            (c.email||'').toLowerCase().includes(f);
   }).sort((a,b) => (b.points||0)-(a.points||0));
@@ -341,11 +353,12 @@ function renderClients(filter=''){
   tbody.innerHTML = filtered.map(c => `
     <tr data-id="${c.id}">
       <td class="checkbox-cell"><input type="checkbox" class="client-checkbox" data-id="${c.id}" ${selectedEmails.has(c.id)?'checked':''}></td>
+      <td>${escapeHtml(c.pseudo||'—')}</td>
       <td>${escapeHtml(c.prenom||'')} ${escapeHtml(c.nom||'')}</td>
       <td>${escapeHtml(c.telephone||'')}</td>
       <td class="pts-badge">${c.points||0}</td>
     </tr>
-  `).join('') || '<tr><td colspan="4" style="text-align:center;color:rgba(243,233,210,.5)">Aucun client</td></tr>';
+  `).join('') || '<tr><td colspan="5" style="text-align:center;color:rgba(243,233,210,.5)">Aucun client</td></tr>';
 
   tbody.querySelectorAll('tr[data-id]').forEach(tr => {
     tr.addEventListener('click', (e) => {
@@ -449,14 +462,31 @@ document.getElementById('sendBulkEmailBtn').addEventListener('click', async () =
 
 function escapeHtml(s){ return (s||'').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
 
+const LEVELS = [
+  { min: 0,    name: 'Joueur débutant',    icon: '🎲' },
+  { min: 100,  name: 'Chanceux',           icon: '⭐' },
+  { min: 500,  name: 'High Roller',        icon: '🎰' },
+  { min: 1500, name: 'Diamond',            icon: '💎' },
+  { min: 5000, name: 'Roi de Monte-Carlo', icon: '👑' }
+];
+function getLevel(points){
+  let lvl = LEVELS[0];
+  for (const l of LEVELS) if ((points||0) >= l.min) lvl = l;
+  return lvl;
+}
+
 function openClientPanel(id){
   const c = clients.find(x => x.id===id);
   if (!c) return;
   currentClientId = id;
+  const lvl = getLevel(c.points);
   document.getElementById('cpName').textContent = `${c.prenom||''} ${c.nom||''}`;
+  document.getElementById('cpPseudo').textContent = c.pseudo || '—';
+  document.getElementById('cpLevel').textContent = `${lvl.icon} ${lvl.name}`;
   document.getElementById('cpTel').textContent = c.telephone||'—';
   document.getElementById('cpEmail').textContent = c.email||'—';
   document.getElementById('cpPoints').textContent = c.points||0;
+  document.getElementById('cpGifts').textContent = c.giftsReceivedCount||0;
   document.getElementById('cpSince').textContent = c.createdAt?.toDate ? c.createdAt.toDate().toLocaleDateString('fr-FR') : '—';
   document.getElementById('cpMsgInput').value = '';
   document.getElementById('clientPanel').classList.add('active');
@@ -465,16 +495,48 @@ document.querySelectorAll('[data-close]').forEach(b => b.addEventListener('click
   e.target.closest('.panel-overlay').classList.remove('active');
 }));
 
+async function logHistory(clientId, label, delta){
+  await addDoc(collection(db, 'clients', clientId, 'history'), {
+    label, delta: delta || 0, createdAt: serverTimestamp()
+  });
+}
+
 async function adjustPoints(delta){
   const amount = parseInt(document.getElementById('cpAmount').value,10) || 0;
   if (!currentClientId || amount <= 0) return;
   const c = clients.find(x => x.id===currentClientId);
-  const newPoints = Math.max(0, (c.points||0) + delta*amount);
-  await updateDoc(doc(db,'clients',currentClientId), { points: newPoints, lastActivity: serverTimestamp() });
+  const change = delta*amount;
+  const newPoints = Math.max(0, (c.points||0) + change);
+  const updates = { points: newPoints, lastActivity: serverTimestamp() };
+  if (change > 0) updates.lifetimePoints = (c.lifetimePoints||0) + change;
+  await updateDoc(doc(db,'clients',currentClientId), updates);
+  await logHistory(currentClientId, change > 0 ? `Points ajoutés par l'équipe` : `Points retirés par l'équipe`, change);
   document.getElementById('cpPoints').textContent = newPoints;
 }
 document.getElementById('cpAdd').addEventListener('click', () => adjustPoints(1));
 document.getElementById('cpSub').addEventListener('click', () => adjustPoints(-1));
+
+document.getElementById('cpGiftBtn').addEventListener('click', async () => {
+  if (!currentClientId) return;
+  const c = clients.find(x => x.id===currentClientId);
+  const newCount = (c.giftsReceivedCount||0) + 1;
+  await updateDoc(doc(db,'clients',currentClientId), { giftsReceivedCount: newCount, lastActivity: serverTimestamp() });
+  await logHistory(currentClientId, '🎁 Cadeau remis par l\'équipe', 0);
+  document.getElementById('cpGifts').textContent = newCount;
+});
+
+document.getElementById('cpResetPinBtn').addEventListener('click', async () => {
+  if (!currentClientId) return;
+  const c = clients.find(x => x.id===currentClientId);
+  const newPin = prompt("Nouveau code à 4 chiffres pour ce client :");
+  if (!newPin || !/^[0-9]{4}$/.test(newPin)) { alert('Le code doit contenir exactement 4 chiffres.'); return; }
+  const pseudoLower = (c.pseudo||'').trim().toLowerCase();
+  const enc = new TextEncoder().encode(pseudoLower + ':' + newPin + ':casino-royal-salt-v1');
+  const buf = await crypto.subtle.digest('SHA-256', enc);
+  const pinHash = Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2,'0')).join('');
+  await updateDoc(doc(db,'clients',currentClientId), { pinHash });
+  alert(`Nouveau code défini : ${newPin}\nCommunique-le au client.`);
+});
 
 document.getElementById('cpSendMsg').addEventListener('click', async () => {
   const text = document.getElementById('cpMsgInput').value.trim();

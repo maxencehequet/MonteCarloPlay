@@ -6,6 +6,14 @@ service cloud.firestore {
     match /clients/{clientId} {
       allow read: if true;
       allow write: if true;
+
+      // Historique des points / cadeaux de ce client
+      match /history/{historyId} {
+        allow read: if true;
+        allow create: if true;
+        allow update: if false;
+        allow delete: if false;
+      }
     }
 
     // Messages admin <-> client
