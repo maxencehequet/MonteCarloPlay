@@ -8,25 +8,25 @@
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="theme-color" content="#0A2E22">
+<meta name="theme-color" content="#150A0E">
 <link rel="manifest" href="./manifest.json">
 <link rel="apple-touch-icon" href="./icon-192.png">
 <title>Casino Royal · Mon espace</title>
-<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700;900&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Bungee&family=Poppins:wght@400;500;600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
-  --felt-dark:#0A2E22;--felt-mid:#0F4A36;--felt-light:#146349;
-  --gold:#D4AF37;--gold-light:#F0D584;--gold-dim:#8A7326;
-  --burgundy:#6E1423;--burgundy-light:#8f2438;--cream:#F3E9D2;--ink:#0C0C0C;
-  --red-pocket:#A6192E;--black-pocket:#161616;
+  --felt-dark:#120810;--felt-mid:#1C0D14;--felt-light:#3B1245;
+  --gold:#FFCB3C;--gold-light:#FFE8A3;--gold-dim:#C9971F;
+  --burgundy:#D42A3C;--burgundy-light:#FF3B4E;--cream:#FFF6E8;--ink:#0C0C0C;
+  --red-pocket:#D42A3C;--black-pocket:#161616;
 }
-html,body{min-height:100%;background:var(--felt-dark);color:var(--cream);font-family:'Cormorant Garamond',serif}
+html,body{min-height:100%;background:var(--felt-dark);color:var(--cream);font-family:'Poppins',sans-serif}
 body{
   min-height:100vh;padding-bottom:40px;
   background:
     radial-gradient(ellipse at 50% 0%, rgba(212,175,55,.08) 0%, transparent 55%),
-    linear-gradient(160deg, var(--felt-mid) 0%, var(--felt-dark) 60%, #071f17 100%);
+    linear-gradient(160deg, var(--felt-mid) 0%, var(--felt-dark) 70%);
 }
 a{color:inherit}
 
@@ -38,11 +38,11 @@ header{
   padding:14px 18px;display:flex;align-items:center;justify-content:space-between;
   backdrop-filter:blur(6px);
 }
-.logo{font-family:'Cinzel',serif;font-weight:700;font-size:1.15rem;letter-spacing:.05em;
+.logo{font-family:'Bungee',cursive;font-weight:700;font-size:1.15rem;letter-spacing:.05em;
   background:linear-gradient(180deg,var(--gold-light),var(--gold));-webkit-background-clip:text;background-clip:text;color:transparent}
 .chips{
   display:flex;align-items:center;gap:8px;background:rgba(0,0,0,.3);border:1px solid var(--gold-dim);
-  border-radius:20px;padding:6px 14px;font-family:'DM Mono',monospace;font-size:1rem;color:var(--gold-light);
+  border-radius:20px;padding:6px 14px;font-family:'Space Mono',monospace;font-size:1rem;color:var(--gold-light);
 }
 .chip-icon{width:20px;height:20px;border-radius:50%;background:radial-gradient(circle at 35% 30%, var(--gold-light), var(--gold) 60%, var(--gold-dim));
   border:2px solid rgba(0,0,0,.3);display:inline-block}
@@ -51,7 +51,7 @@ header{
 .tabbar{display:flex;justify-content:center;gap:4px;padding:16px 12px 0;max-width:640px;margin:0 auto}
 .tab-btn{
   flex:1;text-align:center;background:none;border:1px solid transparent;border-bottom:2px solid transparent;
-  color:rgba(243,233,210,.55);font-family:'Cinzel',serif;font-size:.78rem;letter-spacing:.06em;
+  color:rgba(243,233,210,.55);font-family:'Bungee',cursive;font-size:.78rem;letter-spacing:.06em;
   padding:10px 6px;cursor:pointer;text-transform:uppercase;transition:color .2s, border-color .2s;
 }
 .tab-btn.active{color:var(--gold-light);border-bottom-color:var(--gold)}
@@ -70,12 +70,12 @@ main{max-width:640px;margin:0 auto;padding:20px 16px}
 .game-card::after{content:'';position:absolute;inset:0;border:1px solid rgba(212,175,55,.15);border-radius:8px;margin:3px;pointer-events:none}
 .game-icon{font-size:2.4rem;filter:drop-shadow(0 2px 6px rgba(0,0,0,.4))}
 .game-info{flex:1}
-.game-info h3{font-family:'Cinzel',serif;font-size:1.1rem;color:var(--gold-light);margin-bottom:2px}
+.game-info h3{font-family:'Bungee',cursive;font-size:1.1rem;color:var(--gold-light);margin-bottom:2px}
 .game-info p{font-size:.95rem;color:rgba(243,233,210,.7)}
-.game-plays{font-family:'DM Mono',monospace;font-size:.72rem;color:var(--gold-dim);margin-top:6px}
+.game-plays{font-family:'Space Mono',monospace;font-size:.72rem;color:var(--gold-dim);margin-top:6px}
 .btn-play{
   background:linear-gradient(180deg,var(--gold-light),var(--gold) 55%,var(--gold-dim));
-  color:var(--ink);border:none;border-radius:4px;padding:10px 18px;font-family:'Cinzel',serif;
+  color:var(--ink);border:none;border-radius:4px;padding:10px 18px;font-family:'Bungee',cursive;
   font-weight:700;font-size:.8rem;letter-spacing:.04em;cursor:pointer;text-transform:uppercase;white-space:nowrap;
 }
 .btn-play:disabled{opacity:.4;cursor:not-allowed}
@@ -87,7 +87,7 @@ main{max-width:640px;margin:0 auto;padding:20px 16px}
   width:100%;max-width:420px;background:linear-gradient(180deg,var(--felt-mid),var(--felt-dark));
   border:1px solid var(--gold);border-radius:8px;padding:24px;position:relative;max-height:90vh;overflow-y:auto;
 }
-.modal h2{font-family:'Cinzel',serif;color:var(--gold-light);text-align:center;font-size:1.3rem;margin-bottom:16px}
+.modal h2{font-family:'Bungee',cursive;color:var(--gold-light);text-align:center;font-size:1.3rem;margin-bottom:16px}
 .modal-close{position:absolute;top:12px;right:14px;background:none;border:none;color:var(--gold-dim);font-size:1.4rem;cursor:pointer;line-height:1}
 
 /* Slot machine */
@@ -102,18 +102,18 @@ main{max-width:640px;margin:0 auto;padding:20px 16px}
 
 /* Blackjack */
 .bj-table{text-align:center;margin:10px 0}
-.bj-hand-label{font-family:'DM Mono',monospace;font-size:.75rem;color:var(--gold-dim);letter-spacing:.1em;text-transform:uppercase;margin:14px 0 6px}
+.bj-hand-label{font-family:'Space Mono',monospace;font-size:.75rem;color:var(--gold-dim);letter-spacing:.1em;text-transform:uppercase;margin:14px 0 6px}
 .bj-cards{display:flex;gap:6px;justify-content:center;flex-wrap:wrap;min-height:70px}
 .card{
   width:46px;height:64px;background:var(--cream);border-radius:5px;display:flex;align-items:center;justify-content:center;
-  font-family:'Cinzel',serif;font-weight:700;font-size:1.1rem;box-shadow:0 3px 8px rgba(0,0,0,.4);
+  font-family:'Bungee',cursive;font-weight:700;font-size:1.1rem;box-shadow:0 3px 8px rgba(0,0,0,.4);
 }
 .card.red{color:var(--burgundy)}
 .card.black{color:#111}
 .card.hidden{background:repeating-linear-gradient(45deg,var(--burgundy),var(--burgundy) 4px,#5a0f1c 4px,#5a0f1c 8px);color:transparent;border:1px solid var(--gold-dim)}
-.bj-total{font-family:'DM Mono',monospace;font-size:.85rem;color:var(--cream);margin-top:4px}
+.bj-total{font-family:'Space Mono',monospace;font-size:.85rem;color:var(--cream);margin-top:4px}
 .bj-actions{display:flex;gap:10px;justify-content:center;margin-top:18px}
-.btn-bj{flex:1;max-width:130px;background:linear-gradient(180deg,var(--gold-light),var(--gold));color:var(--ink);border:none;border-radius:4px;padding:11px;font-family:'Cinzel',serif;font-weight:700;font-size:.85rem;cursor:pointer;text-transform:uppercase}
+.btn-bj{flex:1;max-width:130px;background:linear-gradient(180deg,var(--gold-light),var(--gold));color:var(--ink);border:none;border-radius:4px;padding:11px;font-family:'Bungee',cursive;font-weight:700;font-size:.85rem;cursor:pointer;text-transform:uppercase}
 .btn-bj:disabled{opacity:.35;cursor:not-allowed}
 .btn-bj.secondary{background:transparent;border:1px solid var(--gold-dim);color:var(--gold-light)}
 
@@ -123,15 +123,15 @@ main{max-width:640px;margin:0 auto;padding:20px 16px}
 .bet-options{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin:14px 0}
 .bet-btn{
   border:1px solid var(--gold-dim);background:rgba(0,0,0,.25);color:var(--cream);border-radius:4px;
-  padding:8px 14px;font-family:'Cinzel',serif;font-size:.78rem;cursor:pointer;text-transform:uppercase;
+  padding:8px 14px;font-family:'Bungee',cursive;font-size:.78rem;cursor:pointer;text-transform:uppercase;
 }
 .bet-btn.selected{border-color:var(--gold);background:rgba(212,175,55,.2);color:var(--gold-light)}
 .bet-btn.red{color:var(--red-pocket)}
 .bet-btn.black{color:#ddd}
 .number-bet{display:flex;gap:8px;justify-content:center;align-items:center;margin:10px 0}
-.number-bet input{width:70px;background:rgba(0,0,0,.3);border:1px solid var(--gold-dim);color:var(--cream);border-radius:4px;padding:8px;text-align:center;font-family:'DM Mono',monospace}
+.number-bet input{width:70px;background:rgba(0,0,0,.3);border:1px solid var(--gold-dim);color:var(--cream);border-radius:4px;padding:8px;text-align:center;font-family:'Space Mono',monospace}
 
-.result-banner{text-align:center;font-family:'Cinzel',serif;font-size:1.1rem;margin-top:16px;min-height:28px}
+.result-banner{text-align:center;font-family:'Bungee',cursive;font-size:1.1rem;margin-top:16px;min-height:28px}
 .result-banner.win{color:var(--gold-light)}
 .result-banner.lose{color:#e8748a}
 .result-banner.push{color:rgba(243,233,210,.7)}
@@ -142,19 +142,19 @@ main{max-width:640px;margin:0 auto;padding:20px 16px}
 .bubble{max-width:78%;padding:10px 14px;border-radius:10px;font-size:1rem;line-height:1.35}
 .bubble.admin{align-self:flex-start;background:rgba(212,175,55,.15);border:1px solid var(--gold-dim);border-bottom-left-radius:2px}
 .bubble.client{align-self:flex-end;background:rgba(110,20,35,.35);border:1px solid var(--burgundy-light);border-bottom-right-radius:2px}
-.bubble .meta{display:block;font-family:'DM Mono',monospace;font-size:.62rem;color:var(--gold-dim);margin-top:4px}
+.bubble .meta{display:block;font-family:'Space Mono',monospace;font-size:.62rem;color:var(--gold-dim);margin-top:4px}
 .msg-compose{display:flex;gap:8px;margin-top:10px}
-.msg-compose textarea{flex:1;resize:none;background:rgba(0,0,0,.25);border:1px solid var(--gold-dim);border-radius:6px;color:var(--cream);padding:10px;font-family:'Cormorant Garamond',serif;font-size:1rem;min-height:46px}
-.btn-send{background:var(--gold);color:var(--ink);border:none;border-radius:6px;padding:0 18px;font-family:'Cinzel',serif;font-weight:700;cursor:pointer}
+.msg-compose textarea{flex:1;resize:none;background:rgba(0,0,0,.25);border:1px solid var(--gold-dim);border-radius:6px;color:var(--cream);padding:10px;font-family:'Poppins',sans-serif;font-size:1rem;min-height:46px}
+.btn-send{background:var(--gold);color:var(--ink);border:none;border-radius:6px;padding:0 18px;font-family:'Bungee',cursive;font-weight:700;cursor:pointer}
 
 /* Account */
 .account-card{background:linear-gradient(180deg, rgba(15,74,54,.55), rgba(10,46,34,.75));border:1px solid var(--gold-dim);border-radius:8px;padding:24px}
 .account-row{display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid rgba(212,175,55,.12);font-size:1.05rem}
 .account-row:last-child{border-bottom:none}
-.account-row span:first-child{color:rgba(243,233,210,.6);font-family:'DM Mono',monospace;font-size:.75rem;text-transform:uppercase;letter-spacing:.06em}
+.account-row span:first-child{color:rgba(243,233,210,.6);font-family:'Space Mono',monospace;font-size:.75rem;text-transform:uppercase;letter-spacing:.06em}
 .big-points{text-align:center;padding:14px 0 20px}
-.big-points .num{font-family:'Cinzel',serif;font-weight:900;font-size:3rem;color:var(--gold-light);text-shadow:0 4px 18px rgba(212,175,55,.3)}
-.big-points .label{font-family:'DM Mono',monospace;font-size:.7rem;letter-spacing:.2em;color:var(--gold-dim);text-transform:uppercase}
+.big-points .num{font-family:'Bungee',cursive;font-weight:900;font-size:3rem;color:var(--gold-light);text-shadow:0 4px 18px rgba(212,175,55,.3)}
+.big-points .label{font-family:'Space Mono',monospace;font-size:.7rem;letter-spacing:.2em;color:var(--gold-dim);text-transform:uppercase}
 </style>
 </head>
 <body>
@@ -273,9 +273,9 @@ main{max-width:640px;margin:0 auto;padding:20px 16px}
     <h2>Roulette</h2>
     <div class="roulette-wrap">
       <svg width="180" height="180" viewBox="0 0 180 180" id="wheelSvg" class="wheel-svg">
-        <circle cx="90" cy="90" r="86" fill="#111" stroke="#D4AF37" stroke-width="3"/>
+        <circle cx="90" cy="90" r="86" fill="#111" stroke="#FFCB3C" stroke-width="3"/>
         <g id="wheelSegments"></g>
-        <circle cx="90" cy="90" r="14" fill="#D4AF37"/>
+        <circle cx="90" cy="90" r="14" fill="#FFCB3C"/>
       </svg>
     </div>
     <div class="bet-options">
@@ -284,7 +284,7 @@ main{max-width:640px;margin:0 auto;padding:20px 16px}
       <button class="bet-btn" data-bet="vert">Vert (0)</button>
     </div>
     <div class="number-bet">
-      <span style="font-family:'DM Mono',monospace;font-size:.75rem;color:var(--gold-dim)">ou numéro plein</span>
+      <span style="font-family:'Space Mono',monospace;font-size:.75rem;color:var(--gold-dim)">ou numéro plein</span>
       <input type="number" id="numberBetInput" min="0" max="36" placeholder="0-36">
     </div>
     <div style="text-align:center">
@@ -303,12 +303,12 @@ import {
 
 /* ⚠️ Même configuration Firebase que register.html / admin.html — voir instructions dans register.html */
 const firebaseConfig = {
-  apiKey: "REPLACE_ME",
-  authDomain: "REPLACE_ME.firebaseapp.com",
-  projectId: "REPLACE_ME",
-  storageBucket: "REPLACE_ME.firebasestorage.app",
-  messagingSenderId: "REPLACE_ME",
-  appId: "REPLACE_ME"
+  apiKey: "AIzaSyDpQTC-a2uaiMCkwnfCKzDWJJ4PqZJ7pts",
+  authDomain: "montecarlo-play.firebaseapp.com",
+  projectId: "montecarlo-play",
+  storageBucket: "montecarlo-play.firebasestorage.app",
+  messagingSenderId: "704314582373",
+  appId: "1:704314582373:web:6518d788c7abb7972ead8c"
 };
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
